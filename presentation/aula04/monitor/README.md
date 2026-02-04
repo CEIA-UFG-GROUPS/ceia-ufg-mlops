@@ -1,4 +1,4 @@
-# Fundamentos de Docker — Material para Workshop
+# Fundamentos de Docker, Compose e Networks
 
 Este repositório contém um material introdutório e aprofundado sobre Docker, desenvolvido para servir como base teórica e prática em um workshop sobre containers, virtualização e empacotamento de aplicações. O objetivo é apresentar o contexto histórico que levou ao surgimento do Docker, explicar como ele funciona internamente e demonstrar como utilizá-lo no dia a dia do desenvolvimento e da implantação de software.
 
