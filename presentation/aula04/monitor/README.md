@@ -1,16 +1,16 @@
 # Fundamentos de Docker, Compose e Networks
 
-Este repositório contém um material introdutório e aprofundado sobre Docker, desenvolvido para servir como base teórica e prática em um workshop sobre containers, virtualização e empacotamento de aplicações. O objetivo é apresentar o contexto histórico que levou ao surgimento do Docker, explicar como ele funciona internamente e demonstrar como utilizá-lo no dia a dia do desenvolvimento e da implantação de software.
+O objetivo deste material é apresentar o contexto histórico que levou ao surgimento do Docker, explicar como ele funciona internamente e demonstrar como utilizá-lo no dia a dia do desenvolvimento e da implantação de software.
 
 ## Contexto histórico e motivação
 
 Antes do surgimento de containers, aplicações eram tradicionalmente executadas diretamente em servidores físicos ou virtuais. Em ambientes onde múltiplas aplicações coexistiam em um mesmo servidor, surgiam conflitos de dependências, incompatibilidades entre bibliotecas, divergências de versões de runtime e dificuldades na padronização dos ambientes de desenvolvimento, homologação e produção. Cada aplicação exigia configurações específicas, o que tornava o gerenciamento complexo e sujeito a falhas .
 
-Para mitigar esses problemas, a virtualização ganhou força. Máquinas virtuais permitiram isolar aplicações em sistemas operacionais independentes, cada uma com seu próprio kernel, sistema de arquivos e conjunto de recursos. Embora eficaz em termos de isolamento, esse modelo apresentava custos elevados de consumo de memória, processamento e armazenamento, além de tempos de inicialização mais longos e maior sobrecarga operacional .
+Para mitigar esses problemas, a virtualização ganhou força. Máquinas virtuais permitiram isolar aplicações em sistemas operacionais independentes, cada uma com seu próprio kernel, sistema de arquivos e conjunto de recursos. Embora eficaz em termos de isolamento, esse modelo apresentava custos elevados de consumo de memória, processamento e armazenamento, além de tempos de inicialização mais longos e maior sobrecarga operacional.
 
-Com a evolução das tecnologias de kernel e isolamento de processos, surgiu o conceito moderno de containers. Diferentemente das máquinas virtuais, containers compartilham o kernel do sistema operacional hospedeiro, isolando apenas os processos, dependências e o sistema de arquivos necessários para a aplicação. Isso reduziu drasticamente o consumo de recursos e aumentou a eficiência na execução de workloads .
+Com a evolução das tecnologias de kernel e isolamento de processos, surgiu o conceito moderno de containers. Diferente das máquinas virtuais, containers compartilham o kernel do sistema operacional hospedeiro, isolando apenas os processos, dependências e o sistema de arquivos necessários para a aplicação. Isso reduziu drasticamente o consumo de recursos e aumentou a eficiência na execução de workloads.
 
-O Docker emergiu como a plataforma que popularizou e padronizou o uso de containers. Ele se consolidou como uma tecnologia open source amplamente adotada, com forte comunidade, integração com provedores de nuvem e um ecossistema robusto para distribuição e execução de aplicações em ambientes isolados .
+O Docker emergiu como a plataforma que popularizou e padronizou o uso de containers, jáque existem outras tecnologias que também trabalham com containers. Ele se consolidou como uma tecnologia open source amplamente adotada, com forte comunidade, integração com provedores de nuvem e um ecossistema robusto para distribuição e execução de aplicações em ambientes isolados .
 
 ## Conceito de containers e papel do Docker
 
@@ -73,10 +73,6 @@ docker run -v <out_path>:<in_path> -it <CONTAINER_NAME>
 ```
 
 Esse recurso é fundamental para bancos de dados, logs, arquivos de configuração e qualquer cenário que exija persistência.
-
-## Objetivo do workshop
-
-Este material foi elaborado para auxiliar participantes a compreenderem não apenas os comandos básicos do Docker, mas também os fundamentos conceituais que justificam sua existência e sua ampla adoção. A proposta do workshop é capacitar os participantes a utilizarem Docker de forma consciente, entendendo as diferenças entre virtualização tradicional e containers, dominando o fluxo de criação de imagens e aplicando boas práticas para execução de aplicações em ambientes isolados.
 
 ## Introdução ao Docker Compose
 
