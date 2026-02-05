@@ -119,6 +119,7 @@ Docker Compose é uma ferramenta projetada para definir e executar aplicações 
 
 O Compose se tornou especialmente relevante em cenários onde uma aplicação depende de múltiplos componentes, como servidores web, bancos de dados, sistemas de cache e filas de mensagens. Em vez de gerenciar cada container individualmente, o Docker Compose permite orquestrar todo o ecossistema com um único comando, garantindo consistência entre ambientes de desenvolvimento, teste e produção.
 
+Exemplo de um arquivo docker-compose.yaml
 ```yaml
 services:
   # Serviço do frontend (aplicação web)
@@ -214,7 +215,7 @@ networks:
     name: ${PROJECT_NAME}-tron-network
 ```
 
-Uma das grandes vantagens do uso do compose é que, além dapossibilidade de levantar vários containers de uma vez, é possível definir parâmetros para rodar containers sem a necessidade de colocá-los sempre em flags do docker run. 
+Uma das grandes vantagens do uso do compose é que, além dapossibilidade de levantar vários containers de uma vez, é possível definir parâmetros para rodar containers sem a necessidade de colocá-los sempre em flags do `docker run`. 
 
 ## Arquitetura conceitual do Docker Compose
 
@@ -222,11 +223,10 @@ Docker Compose opera com base no conceito de infraestrutura como código. O arqu
 
 Ao executar o comando `docker compose up`, o Compose analisa o arquivo de configuração, cria redes, provisiona volumes, constrói imagens se necessário e inicializa todos os containers na ordem correta, respeitando dependências e parâmetros definidos.
 
-## Estrutura de um arquivo Compose
-
-O arquivo Compose segue a Compose Specification, que unificou versões anteriores do formato e hoje é o padrão oficial suportado pelo Docker CLI moderno. Nele, é possível definir serviços, redes, volumes, segredos e configurações avançadas de execução.
-
-A seção de serviços representa o núcleo do Compose, onde cada container da aplicação é descrito. Cada serviço pode apontar para uma imagem existente ou para um Dockerfile local, definir portas expostas, variáveis de ambiente, volumes persistentes, políticas de reinicialização e limites de recursos. Além disso, o Compose permite configurar redes personalizadas para isolar ou integrar serviços de forma controlada.
+Esse comando deve inicializar os serviços,quando executado na mesma pasta com o arquivo docker-compose.yaml, executando todos os serviços
+```bash
+docker compose up --build
+```
 
 ## Diferença entre Dockerfile e Compose
 
@@ -234,43 +234,17 @@ Embora Dockerfile e Compose sejam frequentemente utilizados em conjunto, eles po
 
 Em projetos reais, é comum que cada serviço possua seu próprio Dockerfile, enquanto o Compose atua como o “maestro” responsável por coordenar a execução integrada de todos os componentes.
 
-## Orquestração de múltiplos serviços
-
-Uma das maiores vantagens do Docker Compose é a capacidade de modelar aplicações distribuídas compostas por vários serviços interdependentes. Ele permite definir, por exemplo, um servidor backend, um banco de dados e um serviço de cache como partes de um mesmo sistema, conectados por uma rede interna isolada.
-
-Além de facilitar a inicialização conjunta desses serviços, o Compose simplifica a configuração de variáveis de ambiente compartilhadas, o mapeamento de portas entre containers e a persistência de dados entre reinicializações. Isso reduz significativamente o esforço necessário para reproduzir ambientes completos em diferentes máquinas ou equipes.
-
 ## Gerenciamento de redes no Docker Compose
 
 O Docker Compose oferece suporte nativo à criação e ao gerenciamento de redes virtuais. Cada projeto Compose cria, por padrão, uma rede isolada, permitindo que os serviços se comuniquem entre si por meio de seus nomes lógicos, sem a necessidade de configuração manual de endereços IP.
 
 Esse modelo favorece a modularidade e a segurança, pois restringe a exposição de serviços apenas ao que for explicitamente definido. Redes personalizadas podem ser configuradas para simular arquiteturas mais complexas, como separação entre camadas de frontend, backend e banco de dados.
 
-## Persistência de dados com volumes no Compose
-
-Em aplicações reais, muitos serviços dependem de dados persistentes, como bancos de dados, logs e arquivos de configuração. O Docker Compose permite declarar volumes como objetos de alto nível, associando-os a serviços específicos para garantir que os dados sejam preservados mesmo quando containers são recriados.
-
-Essa capacidade torna o Compose adequado para ambientes de desenvolvimento, testes automatizados e até cenários de produção em pequena escala, nos quais a persistência de dados é essencial para a integridade do sistema.
-
-## Automatização de ambientes de desenvolvimento e teste
-
-Docker Compose é amplamente utilizado para padronizar ambientes de desenvolvimento e integração contínua. Ao definir toda a pilha de serviços em um único arquivo, equipes podem clonar um repositório e levantar um ambiente funcional com um único comando, reduzindo o tempo de configuração e evitando discrepâncias entre máquinas.
-
-Essa característica também o torna útil para pipelines de CI/CD, onde ambientes temporários podem ser criados e destruídos automaticamente para execução de testes isolados, garantindo reprodutibilidade e eficiência.
-
 ## Evolução do Docker Compose e Compose V2
 
 Originalmente distribuído como uma ferramenta independente chamada `docker-compose`, o Compose evoluiu para ser integrado diretamente ao Docker CLI, passando a ser utilizado como `docker compose`. Essa mudança consolidou o Compose como um plugin oficial, trazendo melhorias de desempenho, compatibilidade e integração com outros recursos do Docker Engine
 
 A versão moderna, conhecida como Compose V2, é implementada em Go e elimina dependências externas, tornando a ferramenta mais leve, rápida e compatível com diferentes sistemas operacionais.
-
-## Casos de uso práticos do Docker Compose
-
-Docker Compose é especialmente indicado para aplicações que exigem múltiplos serviços coordenados, como sistemas web completos, stacks de microserviços, ambientes de testes integrados e protótipos de arquiteturas distribuídas. Ele permite simular ambientes de produção localmente, facilitando o desenvolvimento e a depuração de sistemas complexos.
-
-Além disso, Compose é frequentemente utilizado como ponto de entrada para arquiteturas mais avançadas, servindo como etapa inicial antes da migração para orquestradores mais robustos, como Kubernetes, mantendo uma curva de aprendizado acessível e uma experiência simplificada para desenvolvedores.
-
-Se quiser, posso transformar essas seções em um complemento direto ao README anterior, mantendo coesão com o material principal do workshop.
 
 ## Referências
 
