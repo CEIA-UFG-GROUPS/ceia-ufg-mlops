@@ -4,23 +4,36 @@ O objetivo deste material é apresentar o contexto histórico que levou ao surgi
 
 ## Contexto histórico e motivação
 
-Antes do surgimento de containers, aplicações eram tradicionalmente executadas diretamente em servidores físicos ou virtuais. Em ambientes onde múltiplas aplicações coexistiam em um mesmo servidor, surgiam conflitos de dependências, incompatibilidades entre bibliotecas, divergências de versões de runtime e dificuldades na padronização dos ambientes de desenvolvimento, homologação e produção. Cada aplicação exigia configurações específicas, o que tornava o gerenciamento complexo e sujeito a falhas .
+Antes do surgimento de containers, aplicações eram tradicionalmente executadas diretamente em servidores físicos ou virtuais. Em ambientes onde múltiplas aplicações coexistiam em um mesmo servidor, surgiam conflitos de dependências, incompatibilidades entre bibliotecas, divergências de versões de runtime e dificuldades na padronização dos ambientes de desenvolvimento, homologação e produção. Cada aplicação exigia configurações específicas, o que tornava o gerenciamento complexo e sujeito a falhas.
+
+<img width="1040" height="588" alt="image" src="https://github.com/user-attachments/assets/abf0ae9e-7b72-412a-819c-623d6eb2cbcc" />
 
 Para mitigar esses problemas, a virtualização ganhou força. Máquinas virtuais permitiram isolar aplicações em sistemas operacionais independentes, cada uma com seu próprio kernel, sistema de arquivos e conjunto de recursos. Embora eficaz em termos de isolamento, esse modelo apresentava custos elevados de consumo de memória, processamento e armazenamento, além de tempos de inicialização mais longos e maior sobrecarga operacional.
 
+<img width="1046" height="591" alt="image" src="https://github.com/user-attachments/assets/15c2715c-0412-4431-bced-b586ddecaace" />
+
+
 Com a evolução das tecnologias de kernel e isolamento de processos, surgiu o conceito moderno de containers. Diferente das máquinas virtuais, containers compartilham o kernel do sistema operacional hospedeiro, isolando apenas os processos, dependências e o sistema de arquivos necessários para a aplicação. Isso reduziu drasticamente o consumo de recursos e aumentou a eficiência na execução de workloads.
 
-O Docker emergiu como a plataforma que popularizou e padronizou o uso de containers, jáque existem outras tecnologias que também trabalham com containers. Ele se consolidou como uma tecnologia open source amplamente adotada, com forte comunidade, integração com provedores de nuvem e um ecossistema robusto para distribuição e execução de aplicações em ambientes isolados .
+<img width="1044" height="587" alt="image" src="https://github.com/user-attachments/assets/45d48663-689d-49eb-8885-d1537229a9c4" />
+
+O Docker emergiu como a plataforma que popularizou e padronizou o uso de containers, já que existem outras tecnologias que também trabalham com containers. Ele se consolidou como uma tecnologia open source amplamente adotada, com forte comunidade, integração com provedores de nuvem e um ecossistema robusto para distribuição e execução de aplicações em ambientes isolados .
 
 ## Conceito de containers e papel do Docker
 
-Containers podem ser entendidos como unidades leves e portáteis que empacotam uma aplicação junto com todas as suas dependências, bibliotecas e configurações necessárias para execução. Ao compartilhar o kernel do sistema operacional, eles eliminam a necessidade de replicar recursos completos de um sistema operacional, como ocorre em máquinas virtuais .
+Containers podem ser entendidos como unidades leves e portáteis que empacotam uma aplicação junto com todas as suas dependências, bibliotecas e configurações necessárias para execução. Ao compartilhar o kernel do sistema operacional, eles eliminam a necessidade de replicar recursos completos de um sistema operacional, como ocorre em máquinas virtuais, que precisam replicar interface gráfica, ferramentos de entrada e saída, todo o esquema de pastas e gerenciamento de processos próprios.
 
-O Docker atua como uma plataforma para criar, distribuir e executar containers. Ele fornece ferramentas para empacotar aplicações em imagens, instanciar containers a partir dessas imagens e gerenciar o ciclo de vida dessas instâncias. Sua ampla adoção em ambientes de cloud, como Google Cloud Run e AWS Fargate, reforça seu papel como padrão de mercado para empacotamento e implantação de software moderno .
+O Docker atua como uma plataforma para criar, distribuir e executar containers. Ele fornece ferramentas para empacotar aplicações em imagens, instanciar containers a partir dessas imagens e gerenciar o ciclo de vida dessas instâncias. Sua ampla adoção em ambientes de cloud, como Google Cloud Run e AWS Fargate, reforça seu papel como padrão de mercado para empacotamento e implantação de software moderno.
+
+## Instalação do Docker
+
+Você pode instalar o docker seguindo esse tutorial: 
+
+[Instalando Docker](https://docs.docker.com/desktop/?_gl=1*x9vebn*_gcl_au*MTM5MTcxMjgzLjE3Njg4MzgzNDQ.*_ga*MjkzNTgzNjAzLjE3NjM2ODI3MjI.*_ga_XJWPQMJYHQ*czE3NzAzMjI2MzMkbzEwJGcxJHQxNzcwMzIyNjUxJGo0MiRsMCRoMA..)
 
 ## Imagens Docker e containers
 
-Um container Docker sempre é criado a partir de uma imagem. A imagem funciona como um modelo imutável que descreve tudo o que é necessário para executar uma aplicação, incluindo sistema de arquivos, dependências, variáveis de ambiente e comandos de inicialização. É importante compreender que uma imagem não é um container em execução; ela representa apenas a definição estática do ambiente .
+Um container Docker sempre é criado a partir de uma **imagem**. A imagem funciona como um modelo imutável que descreve tudo o que é necessário para executar uma aplicação, incluindo sistema de arquivos, dependências, variáveis de ambiente e comandos de inicialização. É importante compreender que uma imagem não é um container em execução; ela representa apenas a definição estática do ambiente. Podemos pensar nela como um instalador do ambiente no qual é possível rodar a aplicação que ela propõe. 
 
 As imagens podem ser listadas localmente utilizando o comando:
 
@@ -28,11 +41,34 @@ As imagens podem ser listadas localmente utilizando o comando:
 docker images
 ```
 
-Elas podem ser obtidas a partir de repositórios públicos ou privados, como o Docker Hub, ou construídas localmente a partir de um arquivo de configuração chamado Dockerfile.
+Elas podem ser obtidas a partir de repositórios públicos ou privados, como o [Docker Hub](https://hub.docker.com/), ou construídas localmente a partir de um arquivo de configuração chamado **Dockerfile**.
 
 ## Dockerfile e processo de build
 
-O Dockerfile é um arquivo declarativo que descreve passo a passo como uma imagem deve ser construída. Ele define a imagem base, copia arquivos da aplicação, instala dependências, configura variáveis de ambiente e especifica o comando que será executado quando o container for iniciado .
+O Dockerfile é um arquivo declarativo que descreve passo a passo como uma imagem deve ser construída. Podemos pensar nele como uma "receita" que diz como a imagem deve ser constrída. Ele define a imagem base, copia arquivos da aplicação, instala dependências, configura variáveis de ambiente e especifica o comando que será executado quando o container for iniciado .
+
+```docker
+# Define uma imagem base para iniciar o build
+FROM python:3.12.4 
+
+# Define uma variável de ambiente
+ENV PYTHONDONTWRITEBYTECODE=1
+
+# Define uma pasta interna na imagem na qual vamos trabalhar a partir dessa linha
+WORKDIR /app
+
+# Copia o arquivo requirements.txt para dentro da pasta /app (onde estamos trabalhando) 
+COPY requirements.txt . 
+
+# Instala dependências do sistema
+RUN pip install --no-cache-dir -r requirements.txt 
+
+# Copia todo o restante dos arquivos da aplicação para a pasta /app
+COPY . . 
+
+# Define comando que será executado quando o container for iniciado
+CMD ["python", "-m", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"] 
+```
 
 O processo de criação de uma imagem a partir de um Dockerfile é realizado com o comando:
 
