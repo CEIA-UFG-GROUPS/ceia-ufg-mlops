@@ -48,7 +48,7 @@ Elas podem ser obtidas a partir de repositórios públicos ou privados, como o [
 O Dockerfile é um arquivo declarativo que descreve passo a passo como uma imagem deve ser construída. Podemos pensar nele como uma "receita" que diz como a imagem deve ser constrída. Ele define a imagem base, copia arquivos da aplicação, instala dependências, configura variáveis de ambiente e especifica o comando que será executado quando o container for iniciado .
 
 Exemplo de Dockerfile:
-```docker
+```dockerfile
 # Define uma imagem base para iniciar o build
 FROM python:3.12.4 
 
