@@ -47,6 +47,7 @@ Elas podem ser obtidas a partir de repositórios públicos ou privados, como o [
 
 O Dockerfile é um arquivo declarativo que descreve passo a passo como uma imagem deve ser construída. Podemos pensar nele como uma "receita" que diz como a imagem deve ser constrída. Ele define a imagem base, copia arquivos da aplicação, instala dependências, configura variáveis de ambiente e especifica o comando que será executado quando o container for iniciado .
 
+Exemplo de Dockerfile:
 ```docker
 # Define uma imagem base para iniciar o build
 FROM python:3.12.4 
@@ -90,17 +91,17 @@ docker run -p <OUT_PORT>:<IN_PORT> -it <CONTAINER_NAME>
 
 Esse comando associa uma porta externa da máquina hospedeira a uma porta interna do container, permitindo o acesso à aplicação a partir do ambiente externo.
 
+Containers operam em um modelo de rede isolado, no qual cada instância possui sua própria interface virtual. O Docker permite expor serviços para fora do container por meio do mapeamento de portas, facilitando a comunicação entre aplicações e usuários externos. Esse mecanismo é essencial para executar servidores web, APIs e serviços distribuídos. Por esse motivo precisamos,muitas vezes, expor uma porta com a flag "-p" que mapeia qual porta externa <OUT_PORT> será linkada à porta interna do conteiner <IN_PORT>.
+
 ## Fluxo conceitual do Docker
 
 O fluxo de trabalho no Docker segue uma sequência lógica que começa com a definição do Dockerfile, passa pela criação da imagem e culmina na execução do container. Esse modelo permite reprodutibilidade, portabilidade e padronização de ambientes, tornando o processo de desenvolvimento e implantação mais previsível e escalável .
 
-## Rede em containers
-
-Containers operam em um modelo de rede isolado, no qual cada instância possui sua própria interface virtual. O Docker permite expor serviços para fora do container por meio do mapeamento de portas, facilitando a comunicação entre aplicações e usuários externos. Esse mecanismo é essencial para executar servidores web, APIs e serviços distribuídos .
+<img width="1048" height="583" alt="image" src="https://github.com/user-attachments/assets/18ced274-c7a5-4535-96dd-a05aff681706" />
 
 ## Persistência de dados com volumes
 
-Por padrão, os dados gerados dentro de um container são efêmeros e podem ser perdidos quando ele é removido. Para resolver esse problema, o Docker oferece o conceito de volumes, que permitem mapear diretórios do sistema hospedeiro para dentro do container. Dessa forma, arquivos e dados persistem independentemente do ciclo de vida da instância .
+Por padrão, os dados gerados dentro de um container são efêmeros e podem ser perdidos quando ele é removido. Para resolver esse problema, o Docker oferece o conceito de volumes, que permitem mapear diretórios do sistema hospedeiro para dentro do container. Dessa forma, arquivos e dados persistem independentemente do ciclo de vida da instância.
 
 O comando típico para utilização de volumes é:
 
@@ -110,11 +111,110 @@ docker run -v <out_path>:<in_path> -it <CONTAINER_NAME>
 
 Esse recurso é fundamental para bancos de dados, logs, arquivos de configuração e qualquer cenário que exija persistência.
 
+Podemos pensar em um volume como uma pasta compartilhada entre o computador hospedeiro e o contaier. Alterações nessa pasta feitas no hospedeiro vão afetar a pasta interna do container e o contrário também ocorre. Por isso a existência da flag "-v" que define um uma pasta externa no sistema <out_path> que será linkada auma pasta interna do container <in_path>.
+
 ## Introdução ao Docker Compose
 
 Docker Compose é uma ferramenta projetada para definir e executar aplicações compostas por múltiplos containers de forma declarativa, utilizando um único arquivo de configuração em formato YAML. Enquanto o uso tradicional do Docker envolve a execução manual de vários comandos `docker run` para cada serviço, o Compose centraliza toda a definição da arquitetura da aplicação em um único ponto, permitindo que desenvolvedores descrevam serviços, redes, volumes e dependências de maneira estruturada e reproduzível.
 
 O Compose se tornou especialmente relevante em cenários onde uma aplicação depende de múltiplos componentes, como servidores web, bancos de dados, sistemas de cache e filas de mensagens. Em vez de gerenciar cada container individualmente, o Docker Compose permite orquestrar todo o ecossistema com um único comando, garantindo consistência entre ambientes de desenvolvimento, teste e produção.
+
+```yaml
+services:
+  # Serviço do frontend (aplicação web)
+  front:
+    # Configuração de build da imagem Docker
+    build:
+      # Diretório base onde está o Dockerfile do front-end
+      context: web
+      # Nome do Dockerfile usado para build
+      dockerfile: Dockerfile
+      # Argumentos passados para o Dockerfile durante o build
+      # Podem ser acessados via ARG no Dockerfile
+      args:
+        - PROJECT_NAME=${PROJECT_NAME}
+        - VITE_CHAT_URL=${VITE_CHAT_URL}
+        - VITE_APP_MODE=${VITE_APP_MODE}
+    # Nome fixo do container gerado
+    container_name: ${PROJECT_NAME}-front
+    # Arquivo contendo variáveis de ambiente globais
+    env_file: .env
+    # Mapeamento de portas entre host e container
+    ports:
+      - ${FRONT_PORT}:4173
+    # Rede Docker compartilhada entre os serviços
+    networks:
+      - tron-network
+
+
+  # Serviço do backend (API / servidor)
+  backend:
+    # Configuração de build da imagem Docker
+    build:
+      # Diretório base do backend
+      context: server
+      # Dockerfile usado para construir o backend
+      dockerfile: Dockerfile
+    # Nome fixo do container backend
+    container_name: ${PROJECT_NAME}-extension-backend
+
+    # Variáveis de ambiente injetadas dentro do container
+    environment:
+      - DATABASE_URL=postgresql://secret:password@${PROJECT_NAME}-postgres:5432/tron_db
+    # Volumes persistentes e sincronização de código
+    volumes:
+      - ./server/app/cache:/cache/
+      - ./server/app:/app/
+      - ./logs:/logs/
+    # Porta externa → porta interna do backend
+    ports:
+      - ${SERVER_PORT}:8000
+    # Rede compartilhada
+    networks:
+      - tron-network
+    # Define dependências para garantir ordem de inicialização
+    depends_on:
+      - postgres
+
+
+  # Serviço do banco PostgreSQL
+  postgres:
+    # Imagem oficial do PostgreSQL (versão Alpine, mais leve)
+    image: postgres:14-alpine
+    # Define plataforma para compatibilidade multi-arch
+    platform: ${PLATFORM}
+    # Nome fixo do container PostgreSQL
+    container_name: ${PROJECT_NAME}-postgres
+    # Variáveis de ambiente internas do banco
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=user
+      - POSTGRES_DB=db_name
+      - PGDATA=/var/lib/postgresql/data/pgdata
+      - PG_PORT_5432=${PG_PORT_5432}
+    # Volume persistente para dados do banco
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    # Porta externa → porta interna padrão do PostgreSQL
+    ports:
+      - ${PG_PORT_5432}:5432
+    # Rede compartilhada
+    networks:
+      - tron-network
+
+# Definição dos volumes persistentes
+volumes:
+  postgres_data:
+
+# Definição da rede compartilhada entre os containers
+networks:
+  tron-network:
+    driver: bridge
+    # Nome customizado da rede baseado no projeto
+    name: ${PROJECT_NAME}-tron-network
+```
+
+Uma das grandes vantagens do uso do compose é que, além dapossibilidade de levantar vários containers de uma vez, é possível definir parâmetros para rodar containers sem a necessidade de colocá-los sempre em flags do docker run. 
 
 ## Arquitetura conceitual do Docker Compose
 
