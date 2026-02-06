@@ -4,8 +4,6 @@
 
 Este material prepara o monitor para a aula (Git, GitHub, GitFlow e estruturação de repositórios em ML/MLOps) e serve como **estudo prévio** alinhado ao modelo colaborativo do Grupo de Estudos em MLOps do CEIA/UFG.
 
----
-
 ## 🎯 Objetivo da Aula
 
 Ao final desta aula, espera-se que os participantes compreendam:
@@ -17,8 +15,6 @@ Ao final desta aula, espera-se que os participantes compreendam:
 - A importância de uma boa **organização de repositório** (estrutura de pastas, convenções) para reprodutibilidade e colaboração
 - Como aplicar essas práticas em pipelines de MLOps (ex.: integrações contínuas, deploys controlados por versão, repositórios como fonte da verdade)
 
----
-
 ## 🧠 Contexto: Por que Versionamento e Repositórios são Críticos em ML?
 
 ### Desafios do Desenvolvimento Tradicional vs. Projetos de ML
@@ -28,8 +24,6 @@ Em **software tradicional**, o código é o principal ativo versionado e release
 > **"Se não está no controle de versão, não existe."** — ditado popular em desenvolvimento de software, enfatizando a importância de versionar tudo que for relevante
 
 Em resumo, em projetos de ML a falta de controle de versão e organização não causa apenas pequenas falhas: pode **comprometer a validade de todo o experimento ou modelo produzido**. Por isso, adotar Git/GitHub e estruturar bem os repositórios é fundamental para garantir **reprodutibilidade, colaboração eficiente e integração contínua no pipeline de MLOps.**
-
----
 
 ## 🛠️ Git e Controle de Versão
 
@@ -62,8 +56,6 @@ No Git, criar e gerenciar **branches** é muito leve, o que incentiva seu uso pa
 - **Resolva conflitos de merge com calma**: ao ocorrerem conflitos (duas alterações incompatíveis na mesma linha de um arquivo, em branches distintas), converse com o autor da outra mudança se necessário e teste o resultado da mesclagem para garantir que o pipeline de ML continua funcionando.
 
 Existem estratégias de merge (merge commit, fast-forward, rebase). Para o grupo, basta dominar o merge básico e combinar uma convenção simples, discutindo com a turma conforme a familiaridade.
-
----
 
 ## 🌐 GitHub e Colaboração em Equipe
 
@@ -108,8 +100,6 @@ Independentemente do modelo:
 **GitHub Issues & Projetos**: Como monitor, você pode usar issues para distribuir tarefas (ex.: Issue 1: Atualizar README com instruções de setup, Issue 2: Implementar função X). Ferramentas de projeto (Project Boards) permitem acompanhar o status (To do / Doing / Done). Essa organização alia-se bem com GitFlow (cada issue pode virar uma branch de feature) ou com PRs (cada PR fecha uma issue ao ser mesclado).
 
 Em resumo, GitHub fornece não só o lugar para guardar o código, mas todo um **ambiente de colaboração**. Cabe ao monitor incentivar o uso dessas ferramentas para que o grupo de estudo vivencie práticas de desenvolvimento de software profissional aplicadas ao ciclo de vida de Machine Learning.
-
----
 
 ## 🔀 Estratégias de Branching: GitFlow e Alternativas
 
@@ -177,8 +167,6 @@ Para projetos de MLOps, a escolha entre GitFlow e trunk-based pode depender de q
 - **Ferramentas de CI/CD disponíveis**: se há pipelines que automatizam testes e validações robustas, trunk-based flui bem. Sem muita automação de teste, um develop branch manualmente testado pode evitar bugs em `main`.
 
 Em suma, **escolha uma estratégia e documente-a no repositório** (por exemplo, no README ou Wiki do projeto). Deixe claro como nomear branches, quando deletá-las, quem aprova PRs, etc. Essa clareza evita confusão e conflitos durante o desenvolvimento colaborativo.
-
----
 
 ## 📁 Boas Práticas de Organização de Repositórios de ML
 
@@ -248,8 +236,6 @@ No contexto do nosso grupo de estudo:
 
 Resumindo, **versionar código no Git** é o mínimo, **estruturar o repositório** melhora a eficiência, e ter estratégia para **versão de dados/modelos** completa o quadro de reprodutibilidade. Esse é o núcleo de uma boa engenharia em MLOps.
 
----
-
 ## 📝 Sugestões de Atividades e Discussões
 
 Para tornar a aula dinâmica e fixar os conceitos, o monitor pode propor as seguintes atividades ou tópicos de discussão ao grupo:
@@ -261,8 +247,6 @@ Para tornar a aula dinâmica e fixar os conceitos, o monitor pode propor as segu
 5. **Lightning talk de ferramentas de MLOps**: pesquisas rápidas sobre DVC, MLflow ou CI/CD em ML.
 
 Ajuste as atividades ao nível da turma e priorize prática para iniciantes.
-
----
 
 ## 💬 Pontos para Reflexão Pré-Aula
 
@@ -293,8 +277,6 @@ Como monitor, reflita sobre:
    - Mesmo que não implementemos agora, imaginar essas integrações ajuda a entender o **papel central do repositório**: ele é a fonte a partir da qual todo o pipeline MLOps desencadeia (desde testes até deploy). Estamos estruturando ele de modo a permitir isso no futuro?
 
 Esses pontos são fundamentais para enriquecer a discussão durante o encontro. Antecipe perguntas que os participantes possam fazer (por exemplo: *"Posso usar Google Drive em vez de Git?"* ou *"Preciso mesmo aprender GitFlow?"*) e esteja pronto para responder com exemplos e analogias. Quanto mais clareza você tiver sobre esses tópicos, mais segurança terá ao conduzir a aula e mais conseguirá instigar reflexões nos colegas.
-
----
 
 ## 📚 Referências
 
@@ -344,8 +326,6 @@ Esses pontos são fundamentais para enriquecer a discussão durante o encontro. 
   - Extensão oficial do Git para armazenamento de arquivos grandes. Em vez de salvar o conteúdo de arquivos gigantes no histórico do Git (o que o tornaria lento), salva apenas ponteiros e mantém o conteúdo real em um armazenamento separado otimizado.
   - Útil para versionar, por exemplo, pesos de redes neurais ou conjuntos de dados moderados dentro do GitHub. O monitor pode demonstrar ou explicar seu uso simples (`git lfs track "*.bin"` etc.) se houver interesse do grupo em manter alguns artefatos versionados sem degradar a performance do repositório.
 
----
-
 ## 🔗 Conexões com Outras Aulas
 
 Este conteúdo se conecta com:
@@ -353,7 +333,5 @@ Este conteúdo se conecta com:
 - **Aula 01 (Introdução ao MLOps)**: O uso de controle de versão e repositórios é um dos pilares fundamentais apresentados na introdução ao MLOps, pois está diretamente ligado à **reprodutibilidade e colaboração** no ciclo de vida de ML. Tudo começa com código versionado de forma adequada.
 - **Aula 08 (Deploy de Modelos)**: O deploy de um modelo em produção depende de sabermos exatamente **qual versão de código e de modelo** estamos implantando. Práticas de Git/GitHub (como tags de release ou commit hash) permitem atrelar um deploy a um ponto específico do repositório, garantindo confiança no que está indo para produção.
 - **Aula 09 (Pipelines CI/CD)**: A automação de pipelines de treinamento, teste e deployment (CI/CD para ML) gira em torno de gatilhos baseados em versões de repositório. Por exemplo, um commit na branch principal pode disparar um pipeline de re-treinamento; um pull request pode disparar testes unitários do código. Assim, Git + pipelines constituem juntos o **motor de entregas contínuas** em MLOps.
-
----
 
 🚀 Leitura concluída? Venha para a aula pronto para questionar, complementar e conectar conceitos sobre versionamento de código, colaboração e organização de projetos de ML.
