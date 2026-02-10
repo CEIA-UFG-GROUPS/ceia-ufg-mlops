@@ -46,12 +46,14 @@ A estrutura abaixo deve ser seguida para garantir clareza, progressão lógica e
 - Métricas de infraestrutura (latência, throughput, utilização)
 - Data drift e model drift (NÃO É PARA SE APROFUNDAR NESSES DRIFTS)
 - Prediction latency, request rate, error rate
+- Para LLMs: tamanho do prompt/resposta, custo por requisição, taxa de truncamento, uso de contexto (tokens em cache)
 
 ### 2.3 Desafios específicos de ML
 
 - Como medir qualidade de predições em produção
 - Detecção de drift sem labels verdadeiras
 - Monitoramento de modelos em batch vs real-time
+- Para LLMs: avaliar qualidade de respostas (alucinações, toxicidade, segurança), dificuldade de obter ground truth e uso de métricas proxy (ex: avaliação automática, feedback do usuário)
 
 ---
 
@@ -69,11 +71,13 @@ A estrutura abaixo deve ser seguida para garantir clareza, progressão lógica e
 - Monitoramento geral: Prometheus, Grafana, CloudWatch, Datadog
 - Específicas para ML: Evidently AI, Fiddler, Arize
 - Visualização: dashboards e métricas
+- LLMOps: ferramentas focadas em LLMs (Weights & Biases, LangSmith, OpenAI dashboards, observabilidade de pipelines de prompts)
 
 ### 3.3 Exemplo mínimo (conceitual ou prático)
 
 - Instrumentação básica de um modelo de ML
 - Coleta de métricas essenciais (latência, taxa de erro, distribuição de features)
+- Para LLM: monitorar latência e custo por chamada, tamanho médio de prompt/response, e taxa de respostas consideradas ruins via feedback do usuário
 - Dashboard simples para visualização
 - Alerta básico baseado em threshold
 
@@ -83,3 +87,4 @@ A estrutura abaixo deve ser seguida para garantir clareza, progressão lógica e
 - Evitar alert fatigue
 - Documentar runbooks
 - Implementar troubleshooting sistemático
+- Em LLMOps: definir políticas claras para uso de LLM (limites de custo, tempo de resposta, critérios de qualidade mínima) e sempre registrar contexto das chamadas (prompt, versão do modelo, parâmetros)
