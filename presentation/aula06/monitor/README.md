@@ -1,4 +1,4 @@
-# 📘 Aula XX — Modelos de Embeddings em Produção
+# 📘 Aula 06 — Modelos de Embeddings em Produção
 ## Material de Estudo Prévio (Monitor)
 
 Este material tem como objetivo **preparar o monitor para a aula de Modelos de Embeddings em Produção**, oferecendo uma base conceitual sólida para acompanhar, complementar e aprofundar a discussão conduzida pelo apresentador.
