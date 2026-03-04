@@ -37,9 +37,11 @@ O aprendizado é **ativo, progressivo e coletivo**.
 ## 🗓️ Estrutura do Plano Anual (2026)
 
 ### 🔹 Primeiro Semestre — Formação Inicial em MLOps
+
 Trilha focada em capacitar rapidamente os estudantes para atuar em projetos de pesquisa e desenvolvimento.
 
 Tópicos esperados:
+
 - Fundamentos de MLOps
 - Versionamento de código e dados
 - Experiment tracking
@@ -48,9 +50,11 @@ Tópicos esperados:
 - Introdução a deploy e monitoramento
 
 ### 🔹 Segundo Semestre — Aprofundamento Teórico
+
 Trilha focada no aprofundamento técnico e teórico, preparando os estudantes para **grupos avançados**.
 
 Tópicos esperados:
+
 - Arquiteturas avançadas de ML em produção
 - Escalabilidade e confiabilidade
 - Monitoramento de modelos em produção
@@ -68,6 +72,7 @@ Em 2026, será testado um **modelo colaborativo entre grupos**, especialmente en
 - **NLP**
 
 O objetivo é:
+
 - Incentivar participação em múltiplos grupos
 - Criar uma formação mais abrangente
 - Desenvolver projetos integrados (ex: NLP em produção)
@@ -96,7 +101,7 @@ O objetivo é:
 │   └── apresentador/
 │
 └── ...
-````
+```
 
 ---
 
@@ -108,41 +113,41 @@ Cada pasta de aula (`aula01`, `aula02`, ...) contém:
 
 Materiais preparados pelo **expositor principal do dia**, podendo incluir:
 
-* Slides (`.pdf`, `.pptx`)
-* Notebooks
-* Códigos demonstrativos
-* Links e leituras recomendadas
+- Slides (`.pdf`, `.pptx`)
+- Notebooks
+- Códigos demonstrativos
+- Links e leituras recomendadas
 
 ### 📁 `monitor/`
 
 Materiais preparados pelos **monitores**, como:
 
-* Conteúdo complementar
-* Exemplos práticos
-* Exercícios
-* Scripts auxiliares
-* Resumos e guias de estudo
+- Conteúdo complementar
+- Exemplos práticos
+- Exercícios
+- Scripts auxiliares
+- Resumos e guias de estudo
 
 ---
 
 ## 🧑‍💻 Público-Alvo
 
-* Estudantes do INF UFG
-* Interessados em:
+- Estudantes do INF UFG
+- Interessados em:
 
-  * MLOps
-  * Engenharia de Machine Learning
-  * Pesquisa aplicada em IA
-  * Sistemas de ML em produção
+  - MLOps
+  - Engenharia de Machine Learning
+  - Pesquisa aplicada em IA
+  - Sistemas de ML em produção
 
 ---
 
 ## 📌 Pré-requisitos Recomendados
 
-* Python básico
-* Git e GitHub
-* Conceitos básicos de Machine Learning
-* Vontade de estudar continuamente 🚀
+- Python básico
+- Git e GitHub
+- Conceitos básicos de Machine Learning
+- Vontade de estudar continuamente 🚀
 
 > **Obs:** Os pré-requisitos podem variar conforme a aula; sempre consulte o material antecipadamente.
 
@@ -162,11 +167,11 @@ Materiais preparados pelos **monitores**, como:
 
 Contribuições são **fortemente incentivadas**!
 
-* Correções
-* Melhorias nos materiais
-* Exemplos adicionais
-* Sugestões de leituras
-* Implementações práticas
+- Correções
+- Melhorias nos materiais
+- Exemplos adicionais
+- Sugestões de leituras
+- Implementações práticas
 
 Sinta-se à vontade para abrir **issues** ou **pull requests**.
 
@@ -187,6 +192,3 @@ A licença específica será definida conforme as necessidades do grupo.
 ---
 
 🚀 **Bons estudos e bem-vindos ao Grupo de Estudos em MLOps do CEIA/UFG!**
-
-```
-

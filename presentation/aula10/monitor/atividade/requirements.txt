@@ -1,3 +1,8 @@
-pytest==7.4.0
-pandas
+pytest
+httpx
+fastapi
+uvicorn
 scikit-learn
+joblib
+numpy
+flake8
