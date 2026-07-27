@@ -1,0 +1,6 @@
+# Dependências APENAS da etapa de exportação/quantização (build stage).
+# Inclui PyTorch (pesado), que NÃO vai para a imagem final de serving.
+torch>=2.4
+transformers>=4.44
+optimum[onnxruntime]>=1.21
+onnxruntime>=1.19

@@ -1,0 +1,11 @@
+# Ambiente COMPLETO para desenvolvimento local (exportação + serving + testes).
+# No Docker usamos arquivos separados (requirements-export.txt e
+# requirements-serve.txt) para a imagem final ficar enxuta — veja o Dockerfile.
+torch>=2.4
+transformers>=4.44
+optimum[onnxruntime]>=1.21
+onnxruntime>=1.19
+bentoml>=1.3
+httpx>=0.27
+openai>=1.40
+numpy>=1.26

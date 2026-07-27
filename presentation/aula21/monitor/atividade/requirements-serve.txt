@@ -1,0 +1,7 @@
+# Dependências APENAS do runtime de serving: sem PyTorch!
+# O modelo já está em ONNX; o ONNX Runtime basta para executá-lo.
+# transformers entra apenas pelo tokenizer.
+bentoml>=1.3
+onnxruntime>=1.19
+transformers>=4.44
+numpy>=1.26

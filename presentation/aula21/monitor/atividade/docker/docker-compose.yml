@@ -1,0 +1,60 @@
+# =============================================================================
+# Stack da prática da Aula 21 — Servindo Modelos Pesados
+#
+#   sentiment-api : modelo "clássico" (DistilBERT INT8) servido com
+#                   BentoML + ONNX Runtime. Roda em QUALQUER máquina (CPU).
+#
+#   vllm          : LLM pequeno (Qwen2.5-0.5B) servido com vLLM, API
+#                   OpenAI-compatible. EXIGE GPU NVIDIA + NVIDIA Container
+#                   Toolkit — por isso fica atrás do profile "gpu".
+#
+# Subir só a parte de CPU:
+#   docker compose up --build sentiment-api
+#
+# Subir tudo (máquina com GPU):
+#   docker compose --profile gpu up --build
+# =============================================================================
+
+services:
+  sentiment-api:
+    build:
+      context: ..                 # contexto = pasta atividade/ (acessa src/)
+      dockerfile: docker/Dockerfile
+    ports:
+      - "3000:3000"
+    # Healthcheck usando o endpoint de readiness do BentoML — em produção
+    # é isso que um orquestrador usa para saber quando mandar tráfego.
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:3000/readyz')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  vllm:
+    image: vllm/vllm-openai:latest
+    profiles: ["gpu"]             # só sobe com: docker compose --profile gpu up
+    ports:
+      - "8000:8000"
+    # --dtype half: T4/GPUs antigas não suportam bfloat16
+    # --max-model-len: limita o contexto para caber o KV cache em GPUs pequenas
+    # --gpu-memory-utilization: fração da VRAM que o vLLM pode reservar
+    command: >
+      --model Qwen/Qwen2.5-0.5B-Instruct
+      --dtype half
+      --max-model-len 2048
+      --gpu-memory-utilization 0.85
+    volumes:
+      # Cache dos pesos do HF Hub: o download (~1 GB) acontece só na
+      # primeira subida — pense no impacto disso em cold start/autoscaling.
+      - hf-cache:/root/.cache/huggingface
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+
+volumes:
+  hf-cache:
