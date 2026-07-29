@@ -331,12 +331,14 @@ Monitoramento baseado em **testes externos**, simulando o comportamento do usuá
 #### 1. Métricas de Custo
 
 **Tokens:**
+
 - Número de tokens no prompt (input tokens)
 - Número de tokens na resposta (output tokens)
 - Total de tokens por requisição
 - Custo por requisição (varia por modelo e provedor)
 
 **Custos agregados:**
+
 - Custo total por dia/semana/mês
 - Custo por usuário ou aplicação
 - Comparação entre diferentes modelos/provedores
@@ -344,12 +346,14 @@ Monitoramento baseado em **testes externos**, simulando o comportamento do usuá
 #### 2. Métricas de Latência
 
 **Tempo de resposta:**
+
 - Time to First Token (TTFT): Tempo até primeiro token da resposta
 - Time Per Output Token (TPOT): Tempo médio por token gerado
 - Latência total (end-to-end)
 - Latência p50, p95, p99
 
 **Fatores que afetam latência:**
+
 - Tamanho do prompt
 - Complexidade da tarefa
 - Modelo utilizado (maior = mais lento)
@@ -358,21 +362,25 @@ Monitoramento baseado em **testes externos**, simulando o comportamento do usuá
 #### 3. Métricas de Qualidade
 
 **Alucinações:**
+
 - Respostas factualmente incorretas
 - Informações inventadas
 - Detecção através de validação ou feedback humano
 
 **Relevância:**
+
 - A resposta responde à pergunta?
 - Resposta está no contexto correto?
 - Útil para o usuário?
 
 **Toxicidade e Segurança:**
+
 - Conteúdo ofensivo ou inapropriado
 - Vazamento de informações sensíveis
 - Conformidade com políticas
 
 **Métricas proxy (sem labels verdadeiras):**
+
 - Tamanho da resposta (muito curta ou muito longa pode indicar problema)
 - Confiança do modelo (quando disponível)
 - Feedback do usuário (thumbs up/down, ratings)
@@ -380,12 +388,14 @@ Monitoramento baseado em **testes externos**, simulando o comportamento do usuá
 #### 4. Métricas de Uso
 
 **Utilização:**
+
 - Número de requisições por dia/hora
 - Usuários únicos
 - Taxa de erro (requisições falhadas)
 - Rate limit hits (quando atingido limite de API)
 
 **Distribuição:**
+
 - Tamanho médio de prompts
 - Distribuição de tamanhos de resposta
 - Tipos de requisições mais comuns
@@ -393,11 +403,13 @@ Monitoramento baseado em **testes externos**, simulando o comportamento do usuá
 #### 5. Métricas de Infraestrutura
 
 **Cache e Contexto:**
+
 - Taxa de cache hit (quando usando cache de embeddings)
 - Uso de contexto (quantos tokens do window size são usados)
 - Truncamento de prompts (quando excede limite)
 
 **Recursos:**
+
 - GPU/CPU utilização (para modelos self-hosted)
 - Memória utilizada
 - Throughput (tokens por segundo)
@@ -405,12 +417,14 @@ Monitoramento baseado em **testes externos**, simulando o comportamento do usuá
 ### Prompt Engineering e Observabilidade
 
 **Monitoramento de prompts:**
+
 - Versões de prompts (A/B testing)
 - Estrutura e formato de prompts
 - Uso de few-shot examples
 - Tamanho e complexidade de prompts
 
 **Rastreabilidade:**
+
 - Logar prompts completos (com cuidado para dados sensíveis)
 - Versionamento de templates de prompt
 - Correlação entre prompt e qualidade da resposta
@@ -418,21 +432,25 @@ Monitoramento baseado em **testes externos**, simulando o comportamento do usuá
 ### Ferramentas Específicas para LLMOps
 
 **Weights & Biases (W&B):**
+
 - Tracking de experimentos com LLMs
 - Comparação de modelos e prompts
 - Visualização de custos e latência
 
 **LangSmith (LangChain):**
+
 - Observabilidade de aplicações LangChain
 - Tracing de chains e agents
 - Monitoramento de custos e latência
 
 **OpenAI Dashboard:**
+
 - Métricas de uso da API
 - Custos e limites
 - Análise de requisições
 
 **Outras ferramentas:**
+
 - PromptLayer: Versionamento e monitoramento de prompts
 - Helicone: Observabilidade para LLMs
 - Humanloop: Feedback loops e monitoramento
@@ -858,7 +876,6 @@ Reflita sobre:
 
    - Como observabilidade difere de monitoramento?
    - Quais ferramentas são essenciais?
-
 7. **Quais são os desafios específicos de monitorar LLMs?**
 
    - Como medir qualidade sem labels verdadeiras?
@@ -889,35 +906,36 @@ Esses pontos são fundamentais para enriquecer a discussão durante o encontro.
 ### Documentação e Recursos Online
 
 4. **Prometheus Documentation**
+
    - [https://prometheus.io/docs/](https://prometheus.io/docs/)
    - Guia completo sobre time-series monitoring
    - Best practices de alerting
-
 5. **Grafana Documentation**
+
    - [https://grafana.com/docs/](https://grafana.com/docs/)
    - Criação de dashboards
    - Visualização de métricas
-
 6. **OpenTelemetry**
+
    - [https://opentelemetry.io/](https://opentelemetry.io/)
    - Padrão para observabilidade
    - Instrumentação de aplicações
-
 7. **MLflow Documentation**
+
    - [https://mlflow.org/docs/latest/index.html](https://mlflow.org/docs/latest/index.html)
    - Tracking e monitoramento de modelos ML
-
 8. **Evidently AI Documentation**
+
    - [https://docs.evidentlyai.com/](https://docs.evidentlyai.com/)
    - Monitoramento específico para ML
    - Detecção de drift
-
 9. **LangSmith Documentation**
+
    - [https://docs.smith.langchain.com/](https://docs.smith.langchain.com/)
    - Observabilidade para aplicações LangChain
    - Tracing e monitoramento de LLMs
-
 10. **Weights & Biases Documentation**
+
     - [https://docs.wandb.ai/](https://docs.wandb.ai/)
     - Tracking de experimentos com LLMs
     - Monitoramento de custos e performance
@@ -925,18 +943,19 @@ Esses pontos são fundamentais para enriquecer a discussão durante o encontro.
 ### Artigos e Blog Posts
 
 9. **Google SRE Book - Monitoring Distributed Systems**
+
    - Conceitos fundamentais de monitoramento
    - White-box vs black-box
-
 10. **The Three Pillars of Observability**
+
     - Logs, metrics, traces
     - Como cada pilar contribui para observabilidade
-
 11. **MLOps: Continuous delivery and automation pipelines in machine learning**
+
     - Monitoramento em pipelines de ML
     - Integração com CI/CD
-
 12. **LLMOps: Operationalizing Large Language Models**
+
     - Desafios específicos de monitorar LLMs
     - Práticas de observabilidade para aplicações com LLMs
     - Gerenciamento de custos e latência
@@ -952,47 +971,32 @@ Esses pontos são fundamentais para enriquecer a discussão durante o encontro.
 ### Ferramentas e Frameworks
 
 14. **Prometheus** - [https://prometheus.io/](https://prometheus.io/)
+
     - TSDB e sistema de alertas
-
 15. **Grafana** - [https://grafana.com/](https://grafana.com/)
+
     - Visualização e dashboards
-
 16. **Jaeger** - [https://www.jaegertracing.io/](https://www.jaegertracing.io/)
+
     - Distributed tracing
-
 17. **Evidently AI** - [https://www.evidentlyai.com/](https://www.evidentlyai.com/)
+
     - Monitoramento de ML
-
 18. **Fiddler** - [https://www.fiddler.ai/](https://www.fiddler.ai/)
+
     - Observabilidade de ML
-
 19. **Arize AI** - [https://arize.com/](https://arize.com/)
+
     - Monitoramento de modelos
-
 20. **LangSmith** - [https://www.langchain.com/langsmith](https://www.langchain.com/langsmith)
+
     - Observabilidade para aplicações LangChain e LLMs
-
 21. **Weights & Biases** - [https://wandb.ai/](https://wandb.ai/)
+
     - Tracking de experimentos e monitoramento de LLMs
-
 22. **PromptLayer** - [https://promptlayer.com/](https://promptlayer.com/)
+
     - Versionamento e monitoramento de prompts
-
 23. **Helicone** - [https://www.helicone.ai/](https://www.helicone.ai/)
+
     - Observabilidade para LLMs
-
----
-
-## 🔗 Conexões com Outras Aulas
-
-Este conteúdo se conecta com:
-
-- **Aula 01 (Introdução ao MLOps)**: Monitoramento como parte do ciclo de vida de ML
-- **Aulas sobre Deploy**: Monitoramento de modelos em produção
-- **Aulas sobre Pipelines**: Observabilidade de pipelines de ML
-- **Aulas sobre Retraining**: Detecção de quando retreinar modelos
-- **Aulas sobre LLMs/NLP**: Monitoramento específico para aplicações com Large Language Models (LLMOps)
-
----
-
-🚀 **Leitura concluída? Venha para a aula pronto para questionar, complementar e conectar conceitos sobre observabilidade em sistemas de ML.**

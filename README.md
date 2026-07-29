@@ -83,24 +83,23 @@ O objetivo é:
 
 ```text
 .
-├── presentation/
-│   └── slides gerais, templates e materiais institucionais
-│
-├── aula01/
-│   ├── monitor/
-│   │   └── materiais de apoio, notebooks, exemplos e exercícios
-│   └── apresentador/
-│       └── slides, códigos e referências da apresentação principal
-│
-├── aula02/
-│   ├── monitor/
-│   └── apresentador/
-│
-├── aula03/
-│   ├── monitor/
-│   └── apresentador/
-│
-└── ...
+└── presentation/
+    ├── primeiro-semestre/
+    │   ├── aula01/
+    │   │   ├── monitor/
+    │   │   │   └── materiais de apoio, notebooks, exemplos e exercícios
+    │   │   └── apresentador/
+    │   │       └── slides, códigos e referências da apresentação principal
+    │   ├── aula02/
+    │   │   ├── monitor/
+    │   │   └── apresentador/
+    │   └── ...
+    │
+    └── segundo-semestre/
+        ├── aula12/
+        │   ├── monitor/
+        │   └── apresentador/
+        └── ...
 ```
 
 ---
