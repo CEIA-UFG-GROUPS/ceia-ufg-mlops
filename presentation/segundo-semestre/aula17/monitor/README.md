@@ -186,9 +186,11 @@ Modelar isso como um **DAG (Directed Acyclic Graph — Grafo Acíclico Dirigido)
 Para consolidar os conceitos desta aula, a atividade prática guia os alunos na implementação de um pipeline simples:
 
 1. **Modelagem do DAG**: desenhar as etapas de um pipeline de treinamento simples (ingestão, treino, avaliação, registro) como um grafo de dependências.
-2. **Implementação em Airflow**: criar um DAG mínimo com `PythonOperator`s executando localmente.
+2. **Implementação em Airflow**: criar um DAG mínimo com a TaskFlow API executando em Docker (modo standalone).
 3. **Implementação equivalente em Prefect**: reescrever o mesmo pipeline usando `@flow`/`@task`, comparando a experiência de desenvolvimento.
 4. **Simulação de Falha**: introduzir uma falha proposital em uma tarefa e observar o comportamento de retry configurado.
+
+📁 A implementação completa está disponível em [`atividade/`](atividade/README.md).
 
 ---
 
@@ -207,21 +209,26 @@ Ao estudar este material, reflita sobre as seguintes questões para enriquecer a
 
 ## 📚 Referências
 
+### Material Indicado no Cronograma do Grupo
+
+1. **Lakshmanan, V., Robinson, S. & Munn, M. (2020).** *Machine Learning Design Patterns*. O'Reilly Media. — Cap. 6, Design Pattern 25 "Workflow Pipeline", pp. 282-289.
+2. **Huyen, Chip (2022).** *Designing Machine Learning Systems*. O'Reilly Media. — Cap. 10, seção "Data Science Workflow Management", pp. 314-319.
+
 ### Documentação Oficial
 
-1. **Apache Airflow Documentation** — [https://airflow.apache.org/docs/](https://airflow.apache.org/docs/)
-2. **Prefect Documentation** — [https://docs.prefect.io/](https://docs.prefect.io/)
-3. **Kubeflow Pipelines Documentation** — [https://www.kubeflow.org/docs/components/pipelines/](https://www.kubeflow.org/docs/components/pipelines/)
+3. **Apache Airflow Documentation** — [https://airflow.apache.org/docs/](https://airflow.apache.org/docs/)
+4. **Prefect Documentation** — [https://docs.prefect.io/](https://docs.prefect.io/)
+5. **Kubeflow Pipelines Documentation** — [https://www.kubeflow.org/docs/components/pipelines/](https://www.kubeflow.org/docs/components/pipelines/)
 
 ### Artigos e Publicações
 
-4. **Sculley, D. et al. (2015).** *Hidden Technical Debt in Machine Learning Systems*. NeurIPS 2015. — [https://papers.nips.cc/paper/5656-hidden-technical-debt-in-machine-learning-systems.pdf](https://papers.nips.cc/paper/5656-hidden-technical-debt-in-machine-learning-systems.pdf)
-5. **Kreuzberger, D. et al. (2023).** *Machine Learning Operations (MLOps): Overview, Definition, and Architecture*. IEEE Access. — [https://arxiv.org/abs/2205.02302](https://arxiv.org/abs/2205.02302)
+6. **Sculley, D. et al. (2015).** *Hidden Technical Debt in Machine Learning Systems*. NeurIPS 2015. — [https://papers.nips.cc/paper/5656-hidden-technical-debt-in-machine-learning-systems.pdf](https://papers.nips.cc/paper/5656-hidden-technical-debt-in-machine-learning-systems.pdf)
+7. **Kreuzberger, D. et al. (2023).** *Machine Learning Operations (MLOps): Overview, Definition, and Architecture*. IEEE Access. — [https://arxiv.org/abs/2205.02302](https://arxiv.org/abs/2205.02302)
 
 ### Livros e Guias da Indústria
 
-6. **Huyen, Chip (2022).** *Designing Machine Learning Systems*. O'Reilly Media. (Capítulos sobre pipelines de treinamento e Continuous Training).
-7. **Google Cloud MLOps Architecture Guide** — [https://cloud.google.com/architecture/mlops-continuous-delivery-and-automation-pipelines-in-machine-learning](https://cloud.google.com/architecture/mlops-continuous-delivery-and-automation-pipelines-in-machine-learning)
+8. **Huyen, Chip (2022).** *Designing Machine Learning Systems*. O'Reilly Media. (Capítulos sobre pipelines de treinamento e Continuous Training).
+9. **Google Cloud MLOps Architecture Guide** — [https://cloud.google.com/architecture/mlops-continuous-delivery-and-automation-pipelines-in-machine-learning](https://cloud.google.com/architecture/mlops-continuous-delivery-and-automation-pipelines-in-machine-learning)
 
 ---
 
