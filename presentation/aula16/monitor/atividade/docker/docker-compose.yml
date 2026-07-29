@@ -1,0 +1,68 @@
+# =============================================================================
+# Stack da prática da Aula 16 — Data Version Control (DVC)
+#
+#   minio      : object storage S3-compatible self-hosted — faz o papel do
+#                "bucket da empresa" que serve de remote do DVC.
+#                Console web: http://localhost:9001 (minioadmin / minioadmin)
+#
+#   minio-init : job que cria o bucket `dvc-storage` e encerra.
+#
+#   workspace  : ambiente com git + dvc onde o lab acontece
+#                (entre nele com: docker compose exec workspace bash)
+#
+# Subir tudo:
+#   docker compose up -d --build
+#
+# Entrar no workspace e seguir o README da atividade:
+#   docker compose exec workspace bash
+# =============================================================================
+
+services:
+  minio:
+    image: minio/minio:latest
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    ports:
+      - "9000:9000"   # API S3 (usada pelo DVC)
+      - "9001:9001"   # console web (para VER os objetos chegando no push!)
+    volumes:
+      - minio-data:/data
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  minio-init:
+    image: minio/mc:latest
+    depends_on:
+      minio:
+        condition: service_healthy
+    entrypoint: >
+      /bin/sh -c "
+      mc alias set local http://minio:9000 minioadmin minioadmin &&
+      mc mb --ignore-existing local/dvc-storage &&
+      echo 'Bucket dvc-storage pronto.'
+      "
+
+  workspace:
+    build:
+      context: ..                 # contexto = pasta atividade/ (acessa src/)
+      dockerfile: docker/Dockerfile
+    depends_on:
+      minio:
+        condition: service_healthy
+    # Credenciais que o DVC usa para falar com o MinIO (via API S3).
+    environment:
+      AWS_ACCESS_KEY_ID: minioadmin
+      AWS_SECRET_ACCESS_KEY: minioadmin
+    volumes:
+      - lab:/workspace            # o repositório do lab sobrevive a restarts
+    tty: true
+    stdin_open: true
+
+volumes:
+  minio-data:
+  lab:

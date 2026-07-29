@@ -1,0 +1,56 @@
+# Pipeline reprodutível da prática: prepare -> train -> evaluate
+#
+# Cada estágio declara:
+#   cmd    : o comando a executar
+#   deps   : arquivos dos quais depende (código E dados)
+#   params : chaves do params.yaml que o afetam
+#   outs   : o que produz (entra no cache do DVC e vai para o remote)
+#
+# `dvc repro` compara os HASHES de deps/params com o dvc.lock e re-executa
+# apenas os estágios afetados. Mudou só train.n_estimators? O estágio
+# prepare é pulado ("didn't change, skipping").
+#
+# Repare que data/raw/data.csv aparece como *dep*, nunca como *out*:
+# dado FONTE é versionado com `dvc add`; dados DERIVADOS são outs.
+
+stages:
+  prepare:
+    cmd: python src/prepare.py
+    deps:
+      - src/prepare.py
+      - data/raw/data.csv
+    params:
+      - base.seed
+      - prepare.test_size
+    outs:
+      - data/prepared
+
+  train:
+    cmd: python src/train.py
+    deps:
+      - src/train.py
+      - data/prepared
+    params:
+      - base.seed
+      - train.n_estimators
+      - train.max_depth
+    outs:
+      - models/model.pkl
+
+  evaluate:
+    cmd: python src/evaluate.py
+    deps:
+      - src/evaluate.py
+      - models/model.pkl
+      - data/prepared
+    metrics:
+      # cache: false -> o arquivo fica versionado direto no Git (é pequeno
+      # e textual), permitindo diffs legíveis de métricas em PRs.
+      - eval/metrics.json:
+          cache: false
+    plots:
+      - eval/predictions.csv:
+          template: confusion
+          x: actual
+          y: predicted
+          cache: false

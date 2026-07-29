@@ -1,0 +1,14 @@
+# Hiperparâmetros do pipeline — o "painel de controle" do experimento.
+#
+# Manter parâmetros AQUI (e não hardcoded nos scripts) é o que permite ao
+# DVC detectar exatamente quais estágios uma mudança invalida, e comparar
+# execuções com `dvc params diff` / `dvc exp run --set-param`.
+base:
+  seed: 42
+
+prepare:
+  test_size: 0.25
+
+train:
+  n_estimators: 100
+  max_depth: 5

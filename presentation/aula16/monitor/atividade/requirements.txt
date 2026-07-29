@@ -1,0 +1,7 @@
+# dvc[s3] inclui o suporte a remotes S3/MinIO (usado no caminho Docker).
+# Para o notebook/remote local, o extra [s3] é inofensivo.
+dvc[s3]>=3.0
+scikit-learn>=1.4
+pandas>=2.0
+pyyaml>=6.0
+joblib>=1.3
