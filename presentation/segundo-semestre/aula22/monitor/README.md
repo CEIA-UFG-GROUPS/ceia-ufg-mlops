@@ -166,10 +166,12 @@ Nenhuma dessas estratégias funciona isoladamente — elas dependem de duas peç
 
 Para consolidar os conceitos desta aula, a atividade prática guia os alunos na implementação de um roteador de tráfego simples:
 
-1. **Simulação de Canary**: implementar um roteador Python/FastAPI que distribui tráfego entre duas versões de um modelo com base em uma porcentagem configurável.
-2. **Simulação de Shadow**: implementar o padrão de "chamar em paralelo, logar divergência, nunca expor a resposta do shadow ao usuário".
-3. **Critério de Promoção**: escrever uma função simples que decide, com base em métricas simuladas (taxa de erro, latência), se o canary deve avançar de porcentagem ou ser revertido a 0%.
-4. **Discussão de Blue-Green**: desenhar (sem necessariamente implementar) como um `docker-compose` com dois serviços e um proxy reverso simularia uma troca Blue-Green local.
+1. **Simulação de Canary**: um gateway Python/FastAPI que distribui tráfego entre `champion` e `canary` com base em uma porcentagem configurável (`CANARY_PERCENT`).
+2. **Simulação de Shadow**: o mesmo gateway implementa o padrão de "chamar em paralelo, logar divergência, nunca expor a resposta do shadow ao usuário", com métrica de divergência acumulada.
+3. **Simulação de Blue-Green**: troca atômica de 100% do tráfego entre `champion` e `canary` via variável de ambiente `ACTIVE_COLOR`, sem reiniciar os serviços de modelo.
+4. **Cliente de Carga**: script que dispara N requisições e tabula a distribuição real de respostas entre as versões, tornando visível o comportamento probabilístico de cada estratégia.
+
+📁 A implementação completa está disponível em [`atividade/`](atividade/README.md).
 
 ---
 
@@ -188,22 +190,26 @@ Ao estudar este material, reflita sobre as seguintes questões para enriquecer a
 
 ## 📚 Referências
 
+### Material Indicado no Cronograma do Grupo
+
+1. **Huyen, Chip (2022).** *Designing Machine Learning Systems*. O'Reilly Media. — Cap. 9 "Continual Learning and Test in Production", pp. 281-291 (Shadow Deployment p. 282; Canary Release p. 285).
+
 ### Artigos e Publicações
 
-1. **Humble, J. & Farley, D. (2010).** *Continuous Delivery: Reliable Software Releases through Build, Test, and Deployment Automation*. Addison-Wesley. (Capítulos sobre Blue-Green Deployment e releases progressivos).
-2. **Sato, D. (2014).** *CanaryRelease*. martinfowler.com — [https://martinfowler.com/bliki/CanaryRelease.html](https://martinfowler.com/bliki/CanaryRelease.html)
-3. **Fowler, M. (2010).** *BlueGreenDeployment*. martinfowler.com — [https://martinfowler.com/bliki/BlueGreenDeployment.html](https://martinfowler.com/bliki/BlueGreenDeployment.html)
+2. **Humble, J. & Farley, D. (2010).** *Continuous Delivery: Reliable Software Releases through Build, Test, and Deployment Automation*. Addison-Wesley. (Capítulos sobre Blue-Green Deployment e releases progressivos).
+3. **Sato, D. (2014).** *CanaryRelease*. martinfowler.com — [https://martinfowler.com/bliki/CanaryRelease.html](https://martinfowler.com/bliki/CanaryRelease.html)
+4. **Fowler, M. (2010).** *BlueGreenDeployment*. martinfowler.com — [https://martinfowler.com/bliki/BlueGreenDeployment.html](https://martinfowler.com/bliki/BlueGreenDeployment.html)
 
 ### Documentação Oficial
 
-4. **Istio Traffic Management (Canary/Shadow via Service Mesh)** — [https://istio.io/latest/docs/tasks/traffic-management/](https://istio.io/latest/docs/tasks/traffic-management/)
-5. **Kubernetes Documentation — Rolling Updates & Deployment Strategies** — [https://kubernetes.io/docs/concepts/workloads/controllers/deployment/](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/)
-6. **AWS — Blue/Green Deployments Whitepaper** — [https://docs.aws.amazon.com/whitepapers/latest/blue-green-deployments/introduction.html](https://docs.aws.amazon.com/whitepapers/latest/blue-green-deployments/introduction.html)
+5. **Istio Traffic Management (Canary/Shadow via Service Mesh)** — [https://istio.io/latest/docs/tasks/traffic-management/](https://istio.io/latest/docs/tasks/traffic-management/)
+6. **Kubernetes Documentation — Rolling Updates & Deployment Strategies** — [https://kubernetes.io/docs/concepts/workloads/controllers/deployment/](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/)
+7. **AWS — Blue/Green Deployments Whitepaper** — [https://docs.aws.amazon.com/whitepapers/latest/blue-green-deployments/introduction.html](https://docs.aws.amazon.com/whitepapers/latest/blue-green-deployments/introduction.html)
 
 ### Livros e Guias da Indústria
 
-7. **Huyen, Chip (2022).** *Designing Machine Learning Systems*. O'Reilly Media. (Capítulo sobre deploy e estratégias de rollout progressivo de modelos).
-8. **Google Cloud MLOps Architecture Guide** — [https://cloud.google.com/architecture/mlops-continuous-delivery-and-automation-pipelines-in-machine-learning](https://cloud.google.com/architecture/mlops-continuous-delivery-and-automation-pipelines-in-machine-learning)
+8. **Huyen, Chip (2022).** *Designing Machine Learning Systems*. O'Reilly Media. (Capítulo sobre deploy e estratégias de rollout progressivo de modelos).
+9. **Google Cloud MLOps Architecture Guide** — [https://cloud.google.com/architecture/mlops-continuous-delivery-and-automation-pipelines-in-machine-learning](https://cloud.google.com/architecture/mlops-continuous-delivery-and-automation-pipelines-in-machine-learning)
 
 ---
 

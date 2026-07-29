@@ -1,0 +1,57 @@
+version: "3.8"
+
+services:
+  # Modelo "champion": versão estável em produção, baixa taxa de erro
+  model-champion:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: model-champion
+    command: uvicorn src.model_service:app --host 0.0.0.0 --port 8000
+    environment:
+      - MODEL_VERSION=v1-champion
+      - ERROR_RATE=0.03
+      - LATENCY_MS=15
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # Modelo "canary"/"shadow": versão candidata, ainda não totalmente validada
+  model-canary:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: model-canary
+    command: uvicorn src.model_service:app --host 0.0.0.0 --port 8000
+    environment:
+      - MODEL_VERSION=v2-canary
+      - ERROR_RATE=0.15
+      - LATENCY_MS=25
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # Gateway de tráfego: implementa blue_green / canary / shadow via DEPLOY_STRATEGY
+  gateway:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: gateway-deploy-strategies
+    command: uvicorn src.gateway:app --host 0.0.0.0 --port 8000
+    ports:
+      - "8000:8000"
+    environment:
+      - CHAMPION_URL=http://model-champion:8000
+      - CANARY_URL=http://model-canary:8000
+      - DEPLOY_STRATEGY=${DEPLOY_STRATEGY:-canary}
+      - CANARY_PERCENT=${CANARY_PERCENT:-10}
+      - ACTIVE_COLOR=${ACTIVE_COLOR:-blue}
+    depends_on:
+      model-champion:
+        condition: service_healthy
+      model-canary:
+        condition: service_healthy
