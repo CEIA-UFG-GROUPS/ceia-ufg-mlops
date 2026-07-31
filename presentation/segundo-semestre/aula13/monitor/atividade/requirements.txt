@@ -1,0 +1,9 @@
+# SDK oficial do MCP (inclui FastMCP e a CLI `mcp` / MCP Inspector via `mcp dev`).
+# Pinado em <2 para manter o lab reprodutível: o v2 estável saiu em 2026-07-27 e
+# renomeia a classe do servidor (from mcp.server import MCPServer). Ver README.
+mcp[cli]>=1.27,<2
+
+# Modelo didático de fraude exposto pelo servidor.
+scikit-learn>=1.4
+numpy>=1.26
+joblib>=1.3

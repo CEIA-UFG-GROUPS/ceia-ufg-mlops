@@ -1,0 +1,38 @@
+version: "3.8"
+
+services:
+  # Servidor MCP remoto (Streamable HTTP) — o que um servidor compartilhado por
+  # um time seria: uma URL única que qualquer coding agent pode consumir.
+  mcp-server:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: mlops-mcp-server
+    ports:
+      - "8000:8000"
+    environment:
+      - MCP_TRANSPORT=streamable-http
+      - MCP_HOST=0.0.0.0
+      - MCP_PORT=8000
+    healthcheck:
+      # O endpoint /mcp responde a POST JSON-RPC; aqui só checamos a porta.
+      test: ["CMD", "python", "-c", "import socket; socket.create_connection(('localhost', 8000), timeout=3)"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # Cliente-agente de demonstração. Não sobe por padrão; rode sob demanda com:
+  #   docker compose run --rm agent
+  agent:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: mlops-mcp-agent
+    profiles: ["demo"]
+    command: python src/agent_client.py
+    environment:
+      - MCP_CLIENT_MODE=http
+      - MCP_URL=http://mcp-server:8000/mcp
+    depends_on:
+      mcp-server:
+        condition: service_healthy
