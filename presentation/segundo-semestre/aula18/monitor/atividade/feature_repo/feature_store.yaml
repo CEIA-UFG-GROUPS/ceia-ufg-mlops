@@ -1,0 +1,13 @@
+project: fraud_fs
+# Registry: catálogo central (single source of truth) das definições de features.
+registry: data/registry.db
+provider: local
+# Online store: baixa latência para inferência. sqlite com busca vetorial ligada.
+online_store:
+    type: sqlite
+    path: data/online_store.db
+    vector_enabled: true
+# Offline store: por padrão, arquivos (Parquet). Em produção: BigQuery/Snowflake/Redshift.
+entity_key_serialization_version: 3
+auth:
+    type: no_auth

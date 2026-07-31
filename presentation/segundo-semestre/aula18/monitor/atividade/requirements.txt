@@ -1,0 +1,12 @@
+# Feast pinado para reprodutibilidade: nesta versão a busca vetorial no online
+# store sqlite depende do Python 3.10 (a extensão sqlite_vec só é carregada nessa
+# versão). Por isso a imagem Docker é python:3.10-slim. Ver README.
+feast==0.65.0
+sqlite-vec>=0.1.6        # extensão de busca vetorial usada pelo online store sqlite
+
+# Modelo de fraude + geração de dados/embeddings.
+scikit-learn>=1.4
+pandas>=2.0
+pyarrow>=15
+numpy>=1.26
+joblib>=1.3

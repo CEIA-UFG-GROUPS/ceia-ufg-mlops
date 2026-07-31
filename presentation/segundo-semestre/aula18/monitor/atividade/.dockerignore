@@ -1,0 +1,7 @@
+# Artefatos gerados — a imagem recria tudo do zero via run_demo.sh.
+feature_repo/data/*.db
+feature_repo/data/*.parquet
+feature_repo/data/online_store.db
+models/*.pkl
+**/__pycache__/
+.venv/

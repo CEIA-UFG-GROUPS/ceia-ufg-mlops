@@ -1,0 +1,16 @@
+version: "3.8"
+
+services:
+  # Roda o ciclo completo do feature store (generate -> apply -> train ->
+  # materialize -> serving online -> busca vetorial/RAG) e sai.
+  feast-lab:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: feast-lab
+    # Sobrescreva o CMD para explorar interativamente, ex.:
+    #   docker compose run --rm feast-lab bash
+    #   docker compose run --rm feast-lab feast ui --host 0.0.0.0
+    ports:
+      - "6566:6566"   # feast serve (feature server online)
+      - "8888:8888"   # feast ui
