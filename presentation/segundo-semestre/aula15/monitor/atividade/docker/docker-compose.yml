@@ -1,0 +1,18 @@
+services:
+  mlflow:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: aula15-mlflow
+    ports:
+      - "5000:5000"
+    volumes:
+      - aula15-mlflow-data:/mlflow
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5000/')"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  aula15-mlflow-data:
