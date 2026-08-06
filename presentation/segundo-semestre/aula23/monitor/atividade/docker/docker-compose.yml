@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  # Serviço 1: API de Inferência de Produção (FastAPI)
+  inference-api:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: credit_inference_api
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../data:/app/data
+      - ../models:/app/models
+      - ../reports:/app/reports
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: uvicorn src.app:app --host 0.0.0.0 --port 8000
+
+  # Serviço 2: Servidor Web de Relatórios HTML do Evidently AI
+  reports-server:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: evidently_reports_server
+    ports:
+      - "8080:8080"
+    volumes:
+      - ../reports:/app/reports
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: python -m http.server 8080 --directory reports
+    depends_on:
+      - inference-api
