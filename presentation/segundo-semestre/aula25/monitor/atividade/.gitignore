@@ -1,0 +1,10 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+.deepeval/
+*.egg-info/
+reports/*.json
+reports/*.md
+!reports/.gitkeep
+.deepeval_telemetry.txt

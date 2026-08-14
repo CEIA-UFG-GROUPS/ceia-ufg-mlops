@@ -1,0 +1,47 @@
+# Política de segurança didática — Aula 25 (não é política institucional real)
+version: "aula25-1.0"
+mode_default: fail_closed
+
+input:
+  injection_patterns:
+    - "(?i)ignore\\s+(all\\s+)?(as\\s+)?(regras|instruções|instructions|previous)"
+    - "(?i)disregard\\s+(all\\s+)?previous"
+    - "(?i)esque[cç]a\\s+tudo"
+    - "(?i)\\bDAN\\b"
+    - "(?i)developer\\s+mode"
+    - "(?i)\\[\\s*SYSTEM\\s*\\]"
+    - "(?i)```\\s*system"
+    - "(?i)override\\s+safety"
+    - "(?i)sem\\s+filtros"
+    - "(?i)base64\\s+decode\\s+and\\s+follow"
+    - "(?i)finja\\s+que\\s+pol[ií]ticas\\s+n[aã]o\\s+existem"
+    - "(?i)invente\\s+um\\s+(telefone|e-?mail|cpf)"
+    - "(?i)extraia\\s+qualquer\\s+pii"
+    - "(?i)json\\s+inv[aá]lido"
+    - "(?i)roleplay"
+    - "(?i)pol[ií]ticas\\s+n[aã]o\\s+existem"
+  blocked_tools:
+    - execute_shell
+    - send_email
+    - http_fetch
+  allowed_tools:
+    - search_docs
+    - get_policy
+
+output:
+  pii_patterns:
+    cpf: "\\b\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}\\b"
+    email: "(?i)\\b[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,}\\b"
+    phone: "\\b\\(?\\d{2}\\)?\\s?9?\\d{4}-?\\d{4}\\b"
+  blocklist_keywords:
+    - "senha_raiz"
+    - "api_key_secreta"
+    - "bypass_total"
+  max_output_tokens: 256
+  max_estimated_cost_usd: 0.01
+
+thresholds:
+  citation_f1_min: 0.70
+  schema_validity_min: 1.0
+  redteam_block_rate_min: 0.95
+  geval_faithfulness_min: 0.50

@@ -1,0 +1,12 @@
+services:
+  eval-runner:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    working_dir: /workspace
+    environment:
+      DEEPEVAL_TELEMETRY_OPT_OUT: "1"
+    volumes:
+      - ..:/workspace
+    # CPU-only, one-shot
+    profiles: []
