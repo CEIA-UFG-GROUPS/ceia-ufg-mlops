@@ -1,0 +1,30 @@
+# Python / ambiente
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+
+# Artefatos gerados pelo pipeline (não versionar)
+data/*.csv
+models/*.joblib
+reports/*.json
+reports/*.md
+reports/*.sig
+registry/models.json
+
+# Manter diretórios no git
+!data/.gitkeep
+!models/.gitkeep
+!reports/.gitkeep
+!registry/.gitkeep
+
+# Baseline versionada (exceção — é o contrato do gate)
+!baselines/baseline_metrics.json
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+*.log

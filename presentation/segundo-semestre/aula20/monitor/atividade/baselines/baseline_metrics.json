@@ -1,0 +1,13 @@
+{
+  "accuracy": 0.7527386541471048,
+  "precision": 0.7050359712230215,
+  "recall": 0.7205882352941176,
+  "f1": 0.7127272727272728,
+  "roc_auc": 0.8205541753486136,
+  "n_train": 1861,
+  "n_test": 639,
+  "n_estimators": 80,
+  "max_depth": 8,
+  "model_type": "RandomForestClassifier",
+  "note": "Baseline de referência do lab Aula 20 — não edite sem regenerar o contrato do gate."
+}

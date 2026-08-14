@@ -1,0 +1,195 @@
+# CD4ML mínimo — Aula 20 (CI/CD for Machine Learning)
+# IMPORTANTE: este workflow só roda se a pasta `atividade/` for a RAIZ do repositório.
+# No monorepo do grupo, GitHub Actions NÃO descobre workflows em subpastas profundas
+# como presentation/.../atividade/.github/workflows/ — copie o lab para um repo próprio.
+#
+# Action majors verificados em 2026-08-14:
+#   actions/checkout@v7          (latest v7.0.1)
+#   actions/setup-python@v7      (latest v7.0.0)
+#   actions/upload-artifact@v7   (latest v7.0.1)
+#   actions/download-artifact@v8 (latest v8.0.1)
+#   actions/github-script@v9     (latest v9.0.0)
+
+name: ml-ci
+
+on:
+  pull_request:
+    branches: [main, master]
+  push:
+    branches: [main, master]
+
+concurrency:
+  group: ml-ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+  data-validate:
+    name: 01 · Dados + schema gate
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Instalar dependências
+        run: pip install -r requirements.txt
+
+      - name: Gerar dados sintéticos
+        run: python -m src.01_generate_data
+
+      - name: Validar dados
+        run: python -m src.02_validate_data
+
+      - name: Upload dados (artefato intermediário)
+        uses: actions/upload-artifact@v7
+        with:
+          name: data-csv
+          path: data/
+          retention-days: 3
+
+  train-and-gate:
+    name: 02 · Treino + model gate
+    needs: [data-validate]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Instalar dependências
+        run: pip install -r requirements.txt
+
+      - name: Download dados
+        uses: actions/download-artifact@v8
+        with:
+          name: data-csv
+          path: data/
+
+      - name: Treinar candidato
+        run: python -m src.03_train_model
+
+      - name: Avaliar quality gate
+        id: gate
+        continue-on-error: true
+        run: python -m src.04_evaluate_gate
+
+      - name: Gerar model-diff (pr_comment.md)
+        run: python -m src.05_write_pr_comment
+
+      - name: Security / SHA-256
+        run: python -m src.06_security_scan
+
+      - name: Upload reports + modelo
+        uses: actions/upload-artifact@v7
+        with:
+          name: ml-reports
+          path: |
+            reports/
+            models/candidate.joblib
+          retention-days: 7
+
+      - name: Falhar o job se o gate bloqueou
+        if: steps.gate.outcome == 'failure'
+        run: |
+          echo "Quality gate de modelo FALHOU — merge deve ser bloqueado."
+          exit 1
+
+  comment-pr:
+    name: 03 · Comentar model-diff no PR
+    needs: [train-and-gate]
+    # Roda mesmo se o gate falhou (para o aluno ver o diff no PR)
+    if: always() && github.event_name == 'pull_request' && needs.train-and-gate.result != 'cancelled'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Download reports
+        uses: actions/download-artifact@v8
+        with:
+          name: ml-reports
+          path: .
+
+      - name: Publicar / atualizar comentário no PR
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const fs = require('fs');
+            const path = 'reports/pr_comment.md';
+            if (!fs.existsSync(path)) {
+              core.setFailed('reports/pr_comment.md não encontrado');
+              return;
+            }
+            const body = fs.readFileSync(path, 'utf8');
+            const marker = '<!-- aula20-model-diff -->';
+            const fullBody = `${marker}\n${body}`;
+            const { owner, repo } = context.repo;
+            const issue_number = context.issue.number;
+            const comments = await github.rest.issues.listComments({
+              owner, repo, issue_number, per_page: 100
+            });
+            const existing = comments.data.find(c =>
+              c.user?.type === 'Bot' && c.body?.includes(marker)
+            );
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner, repo, comment_id: existing.id, body: fullBody
+              });
+              core.info(`Comentário atualizado: ${existing.id}`);
+            } else {
+              await github.rest.issues.createComment({
+                owner, repo, issue_number, body: fullBody
+              });
+              core.info('Comentário criado.');
+            }
+
+  register-main:
+    name: 04 · Registrar + evidência (só main)
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+    needs: [train-and-gate]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Instalar dependências
+        run: pip install -r requirements.txt
+
+      - name: Download reports + modelo
+        uses: actions/download-artifact@v8
+        with:
+          name: ml-reports
+          path: .
+
+      - name: Registrar candidato (@challenger)
+        run: python -m src.07_register_model
+
+      - name: Upload registry
+        uses: actions/upload-artifact@v7
+        with:
+          name: model-registry
+          path: |
+            registry/models.json
+            models/
+            reports/security_report.json
+          retention-days: 30

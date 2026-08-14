@@ -1,0 +1,7 @@
+# Lab Aula 20 — CI/CD for ML (CPU, free-tier friendly)
+# Versões pinadas após verificação em 2026-08-14 no ambiente do lab.
+pandas==2.2.3
+numpy==2.1.3
+scikit-learn==1.6.1
+joblib==1.4.2
+PyYAML==6.0.2

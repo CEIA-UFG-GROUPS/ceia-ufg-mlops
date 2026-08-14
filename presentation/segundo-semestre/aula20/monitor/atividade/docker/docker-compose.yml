@@ -1,0 +1,19 @@
+services:
+  ci-lab:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: aula20_ci_lab
+    environment:
+      - PYTHONUNBUFFERED=1
+      - CI_DEGRADE=${CI_DEGRADE:-0}
+      - MODE=${MODE:-pr}
+      - GATE_THRESHOLD=${GATE_THRESHOLD:-0.02}
+    volumes:
+      - ../data:/app/data
+      - ../models:/app/models
+      - ../reports:/app/reports
+      - ../registry:/app/registry
+      - ../baselines:/app/baselines
+    working_dir: /app
+    command: ["bash", "scripts/run_ci_local.sh"]
