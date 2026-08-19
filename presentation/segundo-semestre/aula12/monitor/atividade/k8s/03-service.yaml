@@ -1,0 +1,19 @@
+# Pods morrem e renascem com IP novo. O Service é o nome DNS e o IP estáveis
+# na frente do grupo — e faz load balancing entre as réplicas de graça.
+apiVersion: v1
+kind: Service
+metadata:
+  name: inferencia
+  namespace: aula12
+spec:
+  # ClusterIP: só alcançável de dentro do cluster. É o padrão e cobre a
+  # maioria dos casos; a demo alcança de fora com `kubectl port-forward`.
+  type: ClusterIP
+  # O Service encontra os pods por LABEL, não por nome nem por IP. É por isso
+  # que ele continua correto quando o pod é substituído.
+  selector:
+    app: inferencia
+  ports:
+    - name: http
+      port: 80          # porta do Service
+      targetPort: http  # porta do container (referenciada pelo nome)

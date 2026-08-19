@@ -1,0 +1,28 @@
+# Configuração fora da imagem (12-factor). Trocar qualquer valor aqui NÃO
+# exige rebuild — só um `kubectl rollout restart` (Ato 6 da demo).
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: modelo-config
+  namespace: aula12
+data:
+  MODEL_VERSION: "credito-2026.08-a"
+  LIMIAR_APROVACAO: "0.5"
+  # Simula o tempo de carregar um modelo grande na memória.
+  # No mundo real isto é 30–90 s; aqui, 8 s para caber na demonstração.
+  STARTUP_DELAY_SECONDS: "8"
+---
+# ⚠️ Secret é base64, NÃO é criptografia. Qualquer pessoa com permissão de
+# leitura neste namespace lê o valor com `kubectl get secret -o yaml`.
+# Em produção: External Secrets (puxa do Vault/Secrets Manager) ou Sealed
+# Secrets (criptografado, pode ir para o Git). Este arquivo é didático.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: modelo-secret
+  namespace: aula12
+type: Opaque
+stringData:
+  # `stringData` deixa escrever em texto claro; o Kubernetes converte para
+  # base64 sozinho. Mostrar isso em aula é mais honesto que colar um blob.
+  REGISTRY_TOKEN: "token-de-mentira-nao-use-em-producao"

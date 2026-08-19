@@ -1,0 +1,9 @@
+# Isolamento lógico. Tudo da aula vive aqui, e `kubectl delete ns aula12`
+# limpa o laboratório inteiro num comando.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: aula12
+  labels:
+    curso: mlops-ceia-ufg
+    aula: "12"

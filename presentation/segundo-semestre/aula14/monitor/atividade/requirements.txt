@@ -1,0 +1,6 @@
+great_expectations==1.20.0
+pandas==3.0.5
+scikit-learn==1.9.0
+PyYAML==6.0.3
+pytest==9.1.1
+hypothesis==6.165.10

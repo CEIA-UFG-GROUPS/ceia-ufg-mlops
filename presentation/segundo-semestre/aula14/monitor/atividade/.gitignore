@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.hypothesis/
+.venv/
+*.egg-info/
+gx/
+uncommitted/
+data/*.csv
+reports/*.json
+!data/.gitkeep
+!reports/.gitkeep

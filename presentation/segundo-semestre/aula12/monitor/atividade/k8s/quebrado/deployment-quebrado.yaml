@@ -1,0 +1,49 @@
+# ATO 8 DA DEMO — este manifesto está errado DE PROPÓSITO.
+#
+# Aplique e descubra o defeito usando só três comandos:
+#   kubectl -n aula12 get pods
+#   kubectl -n aula12 describe pod <nome>
+#   kubectl -n aula12 logs <nome>
+#
+# O objetivo pedagógico é ensinar o ciclo de diagnóstico, não o erro em si:
+# `get` mostra QUE está quebrado, `describe` mostra POR QUE (eventos do
+# scheduler e do kubelet), `logs` mostra o que o processo disse antes de morrer.
+#
+# 👉 Resposta no final do README, seção "Ato 8". Não leia antes de tentar.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inferencia-quebrada
+  namespace: aula12
+  labels:
+    app: inferencia-quebrada
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: inferencia-quebrada
+  template:
+    metadata:
+      labels:
+        app: inferencia-quebrada
+    spec:
+      containers:
+        - name: api
+          # Defeito 1: esta tag não existe no nó.
+          image: inferencia:v99
+          imagePullPolicy: Never
+          ports:
+            - name: http
+              containerPort: 8000
+          resources:
+            requests:
+              # Defeito 2: nenhum nó de laboratório tem 64 GiB livres.
+              # Mesmo que a imagem existisse, o pod ficaria Pending.
+              cpu: 100m
+              memory: 64Gi
+          readinessProbe:
+            httpGet:
+              # Defeito 3: este caminho não existe na aplicação (é /ready).
+              path: /pronto
+              port: http
+            periodSeconds: 5
