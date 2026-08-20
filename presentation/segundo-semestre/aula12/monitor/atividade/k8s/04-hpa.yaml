@@ -1,0 +1,23 @@
+# Opcional na demo: escala réplicas sozinho conforme a CPU.
+# Requer o metrics-server no cluster (`minikube addons enable metrics-server`).
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: inferencia
+  namespace: aula12
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: inferencia
+  minReplicas: 2
+  maxReplicas: 8
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          # 60% do `requests.cpu` (50m), não do limite. Confundir os dois é a
+          # causa mais comum de HPA que não escala quando deveria.
+          averageUtilization: 60

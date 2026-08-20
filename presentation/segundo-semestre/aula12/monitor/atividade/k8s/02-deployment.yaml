@@ -1,0 +1,100 @@
+# O objeto que você de fato escreve no dia a dia.
+# Leia de cima para baixo: metadados → quantas cópias → como é cada pod.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inferencia
+  namespace: aula12
+  labels:
+    app: inferencia
+spec:
+  replicas: 3 # <── ESTADO DESEJADO. É esta linha que o loop persegue.
+
+  # O selector diz quais pods PERTENCEM a este Deployment. Precisa casar com
+  # os labels do template abaixo — descasar os dois é o erro nº 1 de quem
+  # escreve o primeiro manifesto na mão.
+  selector:
+    matchLabels:
+      app: inferencia
+
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0 # nunca fique com menos réplicas prontas que o desejado
+      maxSurge: 1 # pode subir 1 pod extra durante a troca
+
+  template: # <── a receita de CADA pod
+    metadata:
+      labels:
+        app: inferencia
+    spec:
+      containers:
+        - name: api
+          image: inferencia:v1
+          # `Never` obriga o uso da imagem já carregada no nó (minikube image
+          # load). Sem isto o kubelet tentaria buscar no Docker Hub e falharia
+          # com ErrImagePull, porque `inferencia:v1` não existe em registry.
+          imagePullPolicy: Never
+          ports:
+            - name: http
+              containerPort: 8000
+
+          env:
+            # O pod descobre o próprio nome via downward API. É o que faz o
+            # load balancing ficar visível no `curl` da demo.
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+          # APP_VERSION NÃO aparece aqui de propósito: ela vem assada na imagem.
+          # Puxa TODAS as chaves do ConfigMap como variáveis de ambiente.
+          envFrom:
+            - configMapRef:
+                name: modelo-config
+
+          resources:
+            # requests = o que o scheduler RESERVA para decidir onde cabe.
+            requests:
+              cpu: 50m
+              memory: 96Mi
+            # limits = teto. Estourar memória mata o container (OOMKilled).
+            limits:
+              cpu: 500m
+              memory: 256Mi
+
+          # ── As três probes ────────────────────────────────────────────────
+          # startupProbe: prazo generoso SÓ na subida. Enquanto ela não passa,
+          # as outras duas ficam suspensas. É isso que permite ter liveness
+          # agressiva sem matar um modelo que demora a carregar.
+          startupProbe:
+            httpGet:
+              path: /ready
+              port: http
+            periodSeconds: 2
+            failureThreshold: 30 # 30 × 2s = até 60 s para carregar
+
+          # readinessProbe: "já posso receber tráfego?" Enquanto falha, o
+          # Service NÃO manda requisição para este pod. Sem ela, todo deploy
+          # gera pico de 503 porque o tráfego chega antes do modelo carregar.
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: http
+            periodSeconds: 5
+            failureThreshold: 3
+
+          # livenessProbe: "ainda estou vivo?" Falhar aqui REINICIA o pod.
+          # Note o caminho diferente da readiness — colapsar os dois é o
+          # erro clássico: um modelo lento vira loop infinito de restart.
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            periodSeconds: 10
+            failureThreshold: 3
+
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsNonRoot: true
+            capabilities:
+              drop: ["ALL"]

@@ -1,0 +1,83 @@
+# Contrato de dados — dataset de risco de crédito
+#
+# Este arquivo é a FONTE DA VERDADE da validação. `src/contract.py` traduz cada
+# chave abaixo em uma Expectation do Great Expectations. Mudar o contrato é um
+# commit revisável; mudar um assert espalhado pelo pipeline, não.
+name: credito
+version: 1
+description: >-
+  Contrato do dataset de inadimplência usado no treino e na inferência batch.
+  Alterações exigem PR com justificativa e bump de `version`.
+owner: time-risco-credito
+
+# ---------------------------------------------------------------------------
+# Expectativas de tabela
+# ---------------------------------------------------------------------------
+table:
+  # Conjunto EXATO de colunas: coluna a mais também é quebra de contrato,
+  # porque indica upstream mudando sem aviso.
+  columns:
+    - id_cliente
+    - idade
+    - renda_anual
+    - score_credito
+    - taxa_endividamento
+    - num_consultas_90d
+    - inadimplente
+  row_count:
+    min: 500
+    max: 20000
+
+# ---------------------------------------------------------------------------
+# Expectativas de coluna
+#
+# Chaves suportadas por src/contract.py:
+#   dtype | nullable | unique | between | in_set | mean_between | stdev_between
+# ---------------------------------------------------------------------------
+columns:
+  id_cliente:
+    dtype: int64
+    nullable: false
+    unique: true
+
+  idade:
+    dtype: int64
+    nullable: false
+    between: { min: 18, max: 100 }
+
+  renda_anual:
+    dtype: float64
+    nullable: false
+    between: { min: 5000, max: 500000 }
+    # Faixa estatística: pega deslocamento de distribuição que o range por
+    # linha não pega (todo valor pode ser "válido" e a média estar errada).
+    mean_between: { min: 50000, max: 95000 }
+
+  score_credito:
+    dtype: int64
+    nullable: false
+    between: { min: 300, max: 850 }
+
+  taxa_endividamento:
+    dtype: float64
+    nullable: false
+    between: { min: 0.0, max: 1.0 }
+
+  num_consultas_90d:
+    dtype: int64
+    nullable: false
+    between: { min: 0, max: 50 }
+
+  inadimplente:
+    dtype: int64
+    nullable: false
+    in_set: [0, 1]
+
+# ---------------------------------------------------------------------------
+# Limiares do gate (o que transforma resultado em decisão de release)
+# ---------------------------------------------------------------------------
+gate:
+  # Validação de dados é binária: qualquer expectativa violada reprova.
+  max_failed_expectations: 0
+  # Sanidade mínima do modelo treinado sobre os dados aprovados.
+  min_roc_auc: 0.70

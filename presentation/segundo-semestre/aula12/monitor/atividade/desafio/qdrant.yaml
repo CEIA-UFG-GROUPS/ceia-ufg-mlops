@@ -1,0 +1,76 @@
+# DESAFIO DA SEMANA (slide 35): subir um banco vetorial com disco que
+# sobrevive ao pod, e provar que a coleção persiste depois de matá-lo.
+#
+# Por que StatefulSet e não Deployment: banco precisa de IDENTIDADE estável
+# (qdrant-0 continua sendo qdrant-0) e de um disco POR RÉPLICA. Deployment dá
+# pods intercambiáveis e um volume compartilhado — errado para banco.
+#
+#   kubectl apply -f desafio/qdrant.yaml
+#   kubectl -n aula12 rollout status statefulset/qdrant
+#   kubectl -n aula12 port-forward svc/qdrant 6333:6333
+#   # criar coleção, matar o pod (kubectl delete pod qdrant-0), conferir que
+#   # a coleção continua lá depois que ele volta.
+apiVersion: v1
+kind: Service
+metadata:
+  name: qdrant
+  namespace: aula12
+spec:
+  # Headless (clusterIP: None): dá DNS por pod (qdrant-0.qdrant), que é o que
+  # um StatefulSet precisa para réplicas se encontrarem.
+  clusterIP: None
+  selector:
+    app: qdrant
+  ports:
+    - name: http
+      port: 6333
+      targetPort: 6333
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: qdrant
+  namespace: aula12
+spec:
+  serviceName: qdrant
+  replicas: 1
+  selector:
+    matchLabels:
+      app: qdrant
+  template:
+    metadata:
+      labels:
+        app: qdrant
+    spec:
+      containers:
+        - name: qdrant
+          image: qdrant/qdrant:v1.12.4
+          ports:
+            - name: http
+              containerPort: 6333
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              memory: 1Gi
+          volumeMounts:
+            - name: storage
+              mountPath: /qdrant/storage
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 5
+
+  # volumeClaimTemplates cria UM PVC por réplica, e o PVC sobrevive ao pod.
+  # É esta seção que responde ao desafio: apague o pod e o disco continua.
+  volumeClaimTemplates:
+    - metadata:
+        name: storage
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 1Gi
