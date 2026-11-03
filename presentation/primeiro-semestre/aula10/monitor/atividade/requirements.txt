@@ -1,8 +1,0 @@
-pytest
-httpx
-fastapi
-uvicorn
-scikit-learn
-joblib
-numpy
-flake8
