@@ -1,0 +1,6 @@
+# Dados gerados pelo preparar_dataset.sh — reproduzíveis, não vão para o Git.
+saida/
+*.tmp
+
+# Se você mudar o diretório de saída, acrescente-o aqui.
+# Regra da semana: o que o script gera não se commita; o que o script lê, sim.

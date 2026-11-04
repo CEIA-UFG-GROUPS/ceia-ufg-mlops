@@ -1,0 +1,91 @@
+### Exemplos de requisições — API de Sentimento (Semana 03)
+#
+# Arquivo no formato .http: abra no VS Code com a extensão REST Client
+# (humao.rest-client) ou no JetBrains, e clique em "Send Request" acima de
+# cada bloco. O equivalente em `curl` está no README desta pasta.
+#
+# Suba a API antes, a partir de `semana-03/codigo/`:
+#   uvicorn app.main:app --reload --port 8000
+
+@host = http://localhost:8000
+
+
+### 1. Metadados do serviço — espera 200
+GET {{host}}/
+
+
+### 2. Health check — espera 200 e {"status":"ok","modelo_carregado":true,...}
+GET {{host}}/health
+
+
+### 3. Predição positiva — espera 200 e "sentimento": "positivo"
+POST {{host}}/predict
+Content-Type: application/json
+
+{
+  "texto": "adorei o atendimento, chegou antes do prazo"
+}
+
+
+### 4. Predição negativa — espera 200 e "sentimento": "negativo"
+POST {{host}}/predict
+Content-Type: application/json
+
+{
+  "texto": "pessimo, veio quebrado e atrasado"
+}
+
+
+### 5. Texto ambíguo — costuma cair em "neutro" (confiança < LIMIAR_NEUTRO)
+POST {{host}}/predict
+Content-Type: application/json
+
+{
+  "texto": "o pedido chegou"
+}
+
+
+### 6. ERRO: texto vazio — espera 422 (min_length=1 do Pydantic)
+POST {{host}}/predict
+Content-Type: application/json
+
+{
+  "texto": ""
+}
+
+
+### 7. ERRO: campo faltando — espera 422 ("Field required")
+POST {{host}}/predict
+Content-Type: application/json
+
+{
+  "frase": "adorei o atendimento"
+}
+
+
+### 8. ERRO: tipo errado — espera 422 ("Input should be a valid string")
+POST {{host}}/predict
+Content-Type: application/json
+
+{
+  "texto": 42
+}
+
+
+### 9. ERRO: JSON malformado — espera 422 ("JSON decode error")
+POST {{host}}/predict
+Content-Type: application/json
+
+{ "texto": "faltou fechar a chave"
+
+
+### 10. ERRO: verbo errado na rota certa — espera 405 Method Not Allowed
+GET {{host}}/predict
+
+
+### 11. ERRO: rota inexistente — espera 404 Not Found
+GET {{host}}/predicao
+
+
+### 12. O contrato da API, em JSON (documento OpenAPI) — espera 200
+GET {{host}}/openapi.json

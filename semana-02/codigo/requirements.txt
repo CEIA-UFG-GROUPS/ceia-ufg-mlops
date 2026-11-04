@@ -1,0 +1,6 @@
+# Dependências do lab da Semana 02.
+#
+# O servidor HTTP não precisa de nada além da biblioteca padrão — é o ponto da
+# semana. A única dependência externa é o scikit-learn, usado pelo modelo de
+# sentimento (`modelo.py`).
+scikit-learn==1.6.1
