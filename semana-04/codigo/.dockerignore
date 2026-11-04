@@ -1,0 +1,28 @@
+# Tudo que não precisa ir para o contexto de build.
+# Contexto menor = build mais rápido e imagem sem surpresas.
+
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+.venv/
+venv/
+env/
+
+.git/
+.gitignore
+.dockerignore
+
+README.md
+docker-compose.yml
+Dockerfile
+ui/
+
+.env
+*.log
+.DS_Store
+.idea/
+.vscode/

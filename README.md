@@ -94,6 +94,9 @@ Todo o dia a dia acontece no **Discord**:
 
 ## 🗓️ Cronograma — 1º semestre (Fundamentos + DevOps)
 
+> 🗺️ Veja também o **[ROADMAP visual](./ROADMAP.md)**: o grafo da trilha e os links de referência
+> de cada semana.
+
 | Semana | Tema | Foco do lab | Desafio |
 | --- | --- | --- | --- |
 | [00](./semana-00/) | Onboarding (ao vivo) | Contas GCP + créditos, ambiente local (WSL/Docker), acesso às 4090, Git/GitHub, Discord | Criar o repositório pessoal e rodar um hello world |

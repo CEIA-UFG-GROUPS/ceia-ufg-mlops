@@ -1,0 +1,5 @@
+# Dependências da API de sentimento.
+# Versões fixadas: build reprodutível e cache de layer previsível.
+fastapi==0.115.6
+uvicorn==0.34.0
+scikit-learn==1.6.1

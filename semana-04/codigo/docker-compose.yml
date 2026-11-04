@@ -1,0 +1,49 @@
+# Dois serviços na mesma network: a API de sentimento e uma mini-UI Streamlit.
+#
+#   docker compose up --build     # sobe tudo
+#   docker compose ps             # estado e healthcheck
+#   docker compose down           # derruba tudo
+#
+# Obs.: a chave `version:` não existe mais no Compose v2 — se você a vir em
+# tutoriais antigos, pode apagar.
+
+# Sem isso, o Compose usaria o nome da pasta ("codigo") como nome do projeto.
+name: sentimento-semana-04
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: sentimento-api:semana-04
+    container_name: sentimento-api
+    ports:
+      - "8000:8000"
+    environment:
+      LIMIAR_NEUTRO: "0.60"
+    healthcheck:
+      # Mesmo comando do HEALTHCHECK do Dockerfile, declarado aqui para ficar
+      # visível e para o `depends_on` da UI poder esperar por ele.
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health')"]
+      interval: 10s
+      timeout: 3s
+      start_period: 20s
+      retries: 5
+    restart: unless-stopped
+
+  ui:
+    build:
+      context: ./ui
+      dockerfile: Dockerfile
+    image: sentimento-ui:semana-04
+    container_name: sentimento-ui
+    ports:
+      - "8501:8501"
+    environment:
+      # `api` é o nome do serviço acima — o DNS interno do Compose resolve
+      # para o IP do container. Nada de localhost, nada de IP fixo.
+      API_URL: "http://api:8000"
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped

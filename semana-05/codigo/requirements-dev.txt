@@ -1,0 +1,7 @@
+# Dependências de desenvolvimento e CI (não entram na imagem Docker).
+# É este arquivo que o GitHub Actions instala nos jobs de lint e de teste.
+-r app/requirements.txt
+
+httpx==0.28.1      # exigido pelo TestClient do FastAPI
+pytest==8.3.4
+ruff==0.8.4

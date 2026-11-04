@@ -1,0 +1,31 @@
+[project]
+name = "api-sentimento"
+version = "1.0.0"
+description = "API de análise de sentimento — grupo de estudos MLOps"
+requires-python = ">=3.12"
+
+# ---------------------------------------------------------------------------
+# pytest
+# ---------------------------------------------------------------------------
+[tool.pytest.ini_options]
+# Coloca a raiz do projeto no sys.path para que `from app.main import app`
+# funcione sem instalar o pacote. Requer pytest >= 7.
+pythonpath = ["."]
+testpaths = ["tests"]
+addopts = "-q"
+
+# ---------------------------------------------------------------------------
+# ruff — linter e formatador (substitui flake8 + isort + black)
+# ---------------------------------------------------------------------------
+[tool.ruff]
+# Mesma versão da imagem base do Dockerfile (python:3.12-slim).
+target-version = "py312"
+line-length = 100
+
+[tool.ruff.lint]
+# E/W = pycodestyle, F = pyflakes, I = isort, UP = pyupgrade,
+# B = bugbear, SIM = simplify.
+select = ["E", "W", "F", "I", "UP", "B", "SIM"]
+
+[tool.ruff.format]
+quote-style = "double"

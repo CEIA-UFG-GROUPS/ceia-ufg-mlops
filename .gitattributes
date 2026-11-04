@@ -1,0 +1,25 @@
+# Normaliza fim de linha: no repositório tudo vai como LF.
+* text=auto eol=lf
+
+# Scripts que dependem do shell nativo
+*.sh    text eol=lf
+*.bash  text eol=lf
+*.ps1   text eol=crlf
+*.bat   text eol=crlf
+*.cmd   text eol=crlf
+
+# Notebooks e configs tratados como texto
+*.ipynb text eol=lf
+*.yml   text eol=lf
+*.yaml  text eol=lf
+
+# Binários (nunca normalizar)
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.ico  binary
+*.pdf  binary
+*.xlsx binary
+*.xls  binary
+*.zip  binary
